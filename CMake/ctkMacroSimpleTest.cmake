@@ -31,4 +31,3 @@ macro(SIMPLE_TEST testname)
   add_test(NAME ${testname} COMMAND $<TARGET_FILE:${KIT}CppTests> ${testname} ${ARGN})
   set_property(TEST ${testname} PROPERTY LABELS ${KIT})
 endmacro()
-

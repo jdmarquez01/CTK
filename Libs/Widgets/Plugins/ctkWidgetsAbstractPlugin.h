@@ -23,11 +23,12 @@
 
 // Qt includes
 #include <QtGlobal>
-#if QT_VERSION < QT_VERSION_CHECK(5,5,0)
-#include <QDesignerCustomWidgetInterface>
-#else
+
+//#if QT_VERSION < QT_VERSION_CHECK(5,5,0)
+//#include <QDesignerCustomWidgetInterface>
+//#else
 #include <QtUiPlugin/QDesignerCustomWidgetInterface>
-#endif
+//#endif
 
 // CTK includes
 #include "ctkWidgetsPluginsExport.h"
@@ -38,7 +39,7 @@ class CTK_WIDGETS_PLUGINS_EXPORT ctkWidgetsAbstractPlugin :
   Q_INTERFACES(QDesignerCustomWidgetInterface);
 public:
 
-  ctkWidgetsAbstractPlugin();
+  ctkWidgetsAbstractPlugin(QObject *parent = 0);
   
   // Do *NOT* reimplement this method.
   QString group() const;
@@ -49,6 +50,7 @@ public:
   virtual QString whatsThis() const;
   virtual void initialize(QDesignerFormEditorInterface *formEditor);
   
+  virtual ~ctkWidgetsAbstractPlugin(){}
 protected:
   bool Initialized;
 };

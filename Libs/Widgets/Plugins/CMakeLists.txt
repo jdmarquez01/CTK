@@ -1,4 +1,4 @@
-project(${PROJECT_NAME}Plugins)
+#project(CTKWidgetsDesignerPlugin)
 
 #
 # See CTK/CMake/ctkMacroBuildQtPlugin.cmake for details
@@ -159,11 +159,45 @@ set(PLUGIN_target_libraries
   CTKWidgets
   )
 
-ctkMacroBuildQtDesignerPlugin(
-  NAME ${PROJECT_NAME}
-  EXPORT_DIRECTIVE ${PLUGIN_export_directive}
-  SRCS ${PLUGIN_SRCS}
-  MOC_SRCS ${PLUGIN_MOC_SRCS}
-  RESOURCES ${PLUGIN_resources}
-  TARGET_LIBRARIES ${PLUGIN_target_libraries}
+
+qt5_wrap_ui(MY_UI_GENERATED_SRC  ${KIT_UI_FORMS})
+qt5_wrap_cpp(MY_MOC  ${PLUGIN_MOC_SRCS} )
+
+
+add_library(
+  CTKWidgetsDesigner SHARED
+  ${PLUGIN_SRCS}
+  ${PLUGIN_resources}
+  ${MYMOC}
 )
+
+find_package(Qt5 COMPONENTS Designer)
+
+generate_export_header(CTKWidgetsDesigner EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/ctkWidgetsPluginsExport.h" EXPORT_MACRO_NAME "CTK_WIDGETS_PLUGINS_EXPORT")  
+
+target_include_directories(CTKWidgetsDesigner PUBLIC 
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> 
+  $<INSTALL_INTERFACE:include/CTKWidgetsDesigner>
+  )
+
+
+
+target_link_libraries(CTKWidgetsDesigner PRIVATE CTKWidgets Qt5::Designer) 
+
+#qt5_wrap_cpp(MY_MOC_GENERATED_SRC ${KIT_GENERATE_MOC_SRCS})
+#add_custom_target(CTKWidgets_mocs DEPENDS  ${MY_MOC_GENERATED_SRC})
+#add_dependencies(CTKWidgets CTKWidgets_mocs)
+
+
+
+
+
+#ctkMacroBuildQtDesignerPlugin(
+#  NAME ${PROJECT_NAME}
+ # EXPORT_DIRECTIVE ${PLUGIN_export_directive}
+ # SRCS ${PLUGIN_SRCS}
+#  MOC_SRCS ${PLUGIN_MOC_SRCS}
+#  RESOURCES ${PLUGIN_resources}
+#  TARGET_LIBRARIES ${PLUGIN_target_libraries}
+#)

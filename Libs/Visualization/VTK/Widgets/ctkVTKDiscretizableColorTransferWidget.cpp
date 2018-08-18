@@ -131,12 +131,12 @@ ctkVTKDiscretizableColorTransferWidgetPrivate
   ctkVTKDiscretizableColorTransferWidget& object)
   : q_ptr(&object)
 {
-  this->scalarsToColorsSelector = CTK_NULLPTR;
+  this->scalarsToColorsSelector = Q_NULLPTR;
 
   // Option menu
-  this->nanButton = CTK_NULLPTR;
-  this->discretizeCheckBox = CTK_NULLPTR;
-  this->nbOfDiscreteValuesSpinBox = CTK_NULLPTR;
+  this->nanButton = Q_NULLPTR;
+  this->discretizeCheckBox = Q_NULLPTR;
+  this->nbOfDiscreteValuesSpinBox = Q_NULLPTR;
 
   this->dataRange[0] = VTK_DOUBLE_MAX;
   this->dataRange[1] = VTK_DOUBLE_MIN;
@@ -190,7 +190,7 @@ void ctkVTKDiscretizableColorTransferWidgetPrivate::setupUi(QWidget* widget)
 
   this->previousOpacityValue = opacitySlider->value();
 
-  this->scalarsToColorsSelector->addScalarsToColors(CTK_NULLPTR, q->tr("Reset"));
+  this->scalarsToColorsSelector->addScalarsToColors(Q_NULLPTR, q->tr("Reset"));
   this->scalarsToColorsSelector->setCurrentIndex(-1);
 
   this->eventLink = vtkSmartPointer<vtkEventQtSlotConnect>::New();
@@ -236,7 +236,7 @@ void ctkVTKDiscretizableColorTransferWidgetPrivate::setupUi(QWidget* widget)
   discretizeLayout->setContentsMargins(0, 0, 0, 0);
 
   optionButton->setIcon(q->style()->standardIcon(
-    QStyle::SP_FileDialogDetailedView, CTK_NULLPTR, optionButton));
+    QStyle::SP_FileDialogDetailedView, Q_NULLPTR, optionButton));
 
   QLabel* nanLabel = new QLabel(q->tr("NaN values"));
   nanButton = new ctkColorPickerButton;
@@ -345,7 +345,7 @@ ctkVTKDiscretizableColorTransferWidgetPrivate::colorTransferFunctionModifiedCall
   vtkSmartPointer<vtkDiscretizableColorTransferFunction> dctf =
     self->scalarsToColorsContextItem->GetDiscretizableColorTransferFunction();
 
-  if (dctf == CTK_NULLPTR)
+  if (dctf == Q_NULLPTR)
   {
     return;
   }
@@ -475,7 +475,7 @@ void ctkVTKDiscretizableColorTransferWidget::setHistogramConnection(
 
   if (!input)
   {
-    d->histogramFilter = CTK_NULLPTR;
+    d->histogramFilter = Q_NULLPTR;
     d->dataMean = 0.;
     return;
   }
@@ -589,7 +589,7 @@ void ctkVTKDiscretizableColorTransferWidget::updateCtfWidgets()
 {
   Q_D(ctkVTKDiscretizableColorTransferWidget);
 
-  if (this->discretizableColorTransferFunction() == CTK_NULLPTR)
+  if (this->discretizableColorTransferFunction() == Q_NULLPTR)
   {
     this->disableCtfWidgets();
   }
@@ -681,8 +681,8 @@ void ctkVTKDiscretizableColorTransferWidget::updateHistogram()
 
   // fill bins and frequencies
 
-  if (d->histogramFilter == CTK_NULLPTR
-   || d->histogramFilter->GetInputConnection(0, 0) == CTK_NULLPTR)
+  if (d->histogramFilter == Q_NULLPTR
+   || d->histogramFilter->GetInputConnection(0, 0) == Q_NULLPTR)
   {
     bins->SetNumberOfTuples(1);
     bins->SetTuple1(0, 0);

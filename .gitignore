@@ -1,6 +1,11 @@
+
+build/
+
 # Ignore all back-up files...
 *~
 *.bak
+*.orig
+
 
 # Exclude Kdevelop4 files ...
 .kdev*

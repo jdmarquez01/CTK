@@ -1,4 +1,3 @@
-
 #! Compile code snippets from a given directory
 #!
 #! This CMake function globs all files called \e main.cpp in the

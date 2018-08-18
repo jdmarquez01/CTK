@@ -1,4 +1,4 @@
-set(KIT ${PROJECT_NAME})
+set(KIT VTKWidgetsTest)
 
 #
 # Tests
@@ -36,7 +36,7 @@ set(TEST_SOURCES
   ctkVTKWidgetsUtilsTestGrabWidget.cpp
   )
 
-if(CTK_USE_CHARTS)
+#if(CTK_USE_CHARTS)
   set(TEST_SOURCES
       ctkVTKChartViewTest1.cpp
       ctkVTKVolumePropertyWidgetTest1.cpp
@@ -44,12 +44,12 @@ if(CTK_USE_CHARTS)
       ctkVTKScalarsToColorsViewTest1.cpp
       ctkVTKScalarsToColorsViewTest2.cpp
       ctkVTKScalarsToColorsViewTest3.cpp
-      ctkVTKScalarsToColorsViewTest4.cpp
+   #   ctkVTKScalarsToColorsViewTest4.cpp
       ctkVTKScalarsToColorsWidgetTest1.cpp
       ctkVTKScalarsToColorsWidgetTest2.cpp
       ctkVTKScalarsToColorsWidgetTest3.cpp
       ${TEST_SOURCES})
-endif()
+#endif()
 
 #
 # Tests expecting CTKData to be set
@@ -81,7 +81,7 @@ if(CTK_USE_QTTESTING)
     ctkVTKTextPropertyWidgetEventTranslatorPlayerTest1.cpp
 #    ctkVTKThresholdWidgetEventTranslatorPlayerTest1.cpp
 #    ctkVTKVolumePropertyWidgetEventTranslatorPlayerTest1.cpp
-    )
+    ) 
 endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/Libs/Testing
@@ -105,47 +105,53 @@ endif()
 set(TEST_MOC_CPP)
 set(TEST_UI_CPP)
 set(Tests_RESOURCES_SRCS)
-if(CTK_QT_VERSION VERSION_GREATER "4")
+#if(CTK_QT_VERSION VERSION_GREATER "4")
   if(TEST_MOC_SOURCES)
     QT5_WRAP_CPP(TEST_MOC_CPP ${TEST_MOC_SOURCES})
   endif()
-  QT5_GENERATE_MOCS(
-    ctkVTKPropertyWidgetTest.cpp
-    )
+  QT5_WRAP_CPP(MYMOC ctkVTKPropertyWidgetTest.cpp)
+
   if(TEST_UI_FORMS)
     QT5_WRAP_UI(TEST_UI_CPP ${TEST_UI_FORMS})
   endif()
   QT5_ADD_RESOURCES(Tests_RESOURCES_SRCS ${Tests_RESOURCES})
-else()
-  if(TEST_MOC_SOURCES)
-    QT4_WRAP_CPP(TEST_MOC_CPP ${TEST_MOC_SOURCES})
-  endif()
-  QT4_GENERATE_MOCS(
-    ctkVTKPropertyWidgetTest.cpp
-    )
-  if(TEST_UI_FORMS)
-    QT4_WRAP_UI(TEST_UI_CPP ${TEST_UI_FORMS})
-  endif()
-  QT4_ADD_RESOURCES(Tests_RESOURCES_SRCS ${Tests_RESOURCES})
-endif()
+#else()
+#  if(TEST_MOC_SOURCES)
+#    QT4_WRAP_CPP(TEST_MOC_CPP ${TEST_MOC_SOURCES})
+#  endif()
+#  QT4_GENERATE_MOCS(
+#    ctkVTKPropertyWidgetTest.cpp
+#    )
+#  if(TEST_UI_FORMS)
+#    QT4_WRAP_UI(TEST_UI_CPP ${TEST_UI_FORMS})
+#  endif()
+#  QT4_ADD_RESOURCES(Tests_RESOURCES_SRCS ${Tests_RESOURCES})
+#endif()
+find_package(Qt5 COMPONENTS Test)
 
-add_executable(${KIT}CppTests ${Tests} ${TEST_MOC_CPP} ${TEST_UI_CPP} ${Tests_RESOURCES_SRCS})
-if(${VTK_VERSION_MAJOR} GREATER 5)
+add_executable(${KIT}CppTests ${Tests} ${TEST_MOC_CPP} ${TEST_UI_CPP} ${Tests_RESOURCES_SRCS} )
+#if(${VTK_VERSION_MAJOR} GREATER 5)
   set(VTK_CHARTS_LIB vtkChartsCore)
-else()
-  set(VTK_CHARTS_LIB vtkCharts)
-endif()
+#else()
+#  set(VTK_CHARTS_LIB vtkCharts)
+#endif()
 
 
 
-target_link_libraries(${KIT}CppTests ${LIBRARY_NAME} ${VTK_CHARTS_LIB} ${CTK_BASE_LIBRARIES})
+target_link_libraries(${KIT}CppTests ${VTK_CHARTS_LIB} ${CTK_BASE_LIBRARIES} CTKVisualizationVTKWidgets CTKVisualizationVTKCore)
 
-if(CTK_QT_VERSION VERSION_GREATER "4")
-  target_link_libraries(${KIT}CppTests ${Qt5Test_LIBRARIES})
-endif()
-if(CTK_USE_QTTESTING)
-  target_link_libraries(${KIT}CppTests CTKQtTesting)
-endif()
+#if(CTK_QT_VERSION VERSION_GREATER "4")
+  target_link_libraries(${KIT}CppTests ${Qt5Test_LIBRARIES} Qt5::Test)
+
+
+
+#endif()
+#if(CTK_USE_QTTESTING)
+#  target_link_libraries(${KIT}CppTests CTKQtTesting)
+#endif()
+
+add_custom_target(${KIT}CppTests_mocs DEPENDS  ${MYMOC})
+add_dependencies(${KIT}CppTests ${KIT}CppTests_mocs)
 
 #
 # Add Tests
@@ -173,7 +179,7 @@ SIMPLE_TEST( ctkTransferFunctionViewTest2 )
 SIMPLE_TEST( ctkTransferFunctionViewTest3 )
 SIMPLE_TEST( ctkTransferFunctionViewTest4 )
 SIMPLE_TEST( ctkTransferFunctionViewTest5 )
-if(CTK_USE_CHARTS)
+#if(CTK_USE_CHARTS)
   SIMPLE_TEST( ctkVTKChartViewTest1 )
   SIMPLE_TEST( ctkVTKVolumePropertyWidgetTest1 )
   SIMPLE_TEST( ctkVTKDiscretizableColorTransferWidgetTest1 )
@@ -184,7 +190,7 @@ if(CTK_USE_CHARTS)
   SIMPLE_TEST( ctkVTKScalarsToColorsWidgetTest1 )
   SIMPLE_TEST( ctkVTKScalarsToColorsWidgetTest2 )
   SIMPLE_TEST( ctkVTKScalarsToColorsWidgetTest3 )
-endif()
+#endif()
 SIMPLE_TEST( ctkVTKRenderViewTest1 )
 SIMPLE_TEST( ctkVTKScalarsToColorsComboBoxTest1 )
 SIMPLE_TEST( ctkVTKSliceViewTest1 )

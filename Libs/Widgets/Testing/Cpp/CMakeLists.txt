@@ -231,32 +231,31 @@ set(Tests_MOC_CPPS
 set(Tests_MOC_CPP)
 set(Tests_UI_CPP)
 set(Tests_RESOURCES_SRCS)
-if(CTK_QT_VERSION VERSION_GREATER "4")
   qt5_wrap_cpp(Tests_MOC_CPP ${Tests_MOC_SRCS})
-  qt5_generate_mocs(${Tests_MOC_CPPS})
-  if(TEST_UI_FORMS)
+  qt5_wrap_cpp(DEPS ${Tests_MOC_CPPS})
+  #if(TEST_UI_FORMS)
     qt5_wrap_ui(Tests_UI_CPP ${Tests_UI_FORMS})
-  endif()
+  #endif()
   qt5_add_resources(Tests_RESOURCES_SRCS ${Tests_RESOURCES})
-else()
-  QT4_WRAP_CPP(Tests_MOC_CPP ${Tests_MOC_SRCS})
-  QT4_GENERATE_MOCS(${Tests_MOC_CPPS})
-  if(TEST_UI_FORMS)
-    QT4_WRAP_UI(Tests_UI_CPP ${Tests_UI_FORMS})
-  endif()
-  QT4_ADD_RESOURCES(Tests_RESOURCES_SRCS ${Tests_RESOURCES})
-endif()
+
+
+find_package(Qt5 COMPONENTS Test)
 
 add_executable(${KIT}CppTests ${Tests} ${Tests_SRCS} ${Tests_MOC_CPP} ${Tests_UI_CPP} ${Tests_RESOURCES_SRCS})
 target_link_libraries(${KIT}CppTests ${LIBRARY_NAME})
 
-if(CTK_QT_VERSION VERSION_GREATER "4")
+
+add_custom_target(${KIT}CppTests_mocs DEPENDS  ${DEPS})
+add_dependencies(${KIT}CppTests  ${KIT}CppTests_mocs)
+
+
+#if(CTK_QT_VERSION VERSION_GREATER "4")
   list(APPEND KIT_target_libraries Qt5::Test)
   if(CTK_USE_QTTESTING)
     list(APPEND KIT_target_libraries Qt5::Xml Qt5::XmlPatterns)
   endif()
   target_link_libraries(${KIT}CppTests ${KIT_target_libraries})
-endif()
+#endif()
 
 #
 # Add Tests

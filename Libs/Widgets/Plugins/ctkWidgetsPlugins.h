@@ -23,11 +23,11 @@
 
 // Qt includes
 #include <QtGlobal>
-#ifndef HAVE_QT5
-#include <QDesignerCustomWidgetCollectionInterface>
-#else
+//#ifndef HAVE_QT5
+//#include <QDesignerCustomWidgetCollectionInterface>
+//#else
 #include <QtUiPlugin/QDesignerCustomWidgetCollectionInterface>
-#endif
+//#endif
 
 // CTK includes
 #include "ctkWidgetsPluginsExport.h"

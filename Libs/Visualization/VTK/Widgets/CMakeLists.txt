@@ -1,5 +1,4 @@
-project(CTKVisualizationVTKWidgets)
-
+find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
 
 #
@@ -124,6 +123,8 @@ if(${VTK_VERSION_MAJOR} GREATER 5)
     vtkRenderingContext2D
     vtkViewsContext2D
     vtkGUISupportQt
+    vtkRenderingFreeType
+    vtkRenderingFreeTypeFontConfig
     )
   if(TARGET vtkRenderingContext${VTK_RENDERING_BACKEND})
     list(APPEND VTK_LIBRARIES vtkRenderingContext${VTK_RENDERING_BACKEND})
@@ -139,9 +140,8 @@ else()
     QVTK
     )
 endif()
-
+set(CTK_USE_CHARTS 1)
 if(CTK_LIB_Visualization/VTK/Widgets_USE_TRANSFER_FUNCTION_CHARTS)
-  set(CTK_USE_CHARTS 1)
 endif()
 
 if(${CTK_USE_CHARTS})
@@ -182,7 +182,9 @@ endif()
 
 # Target libraries - See CMake/ctkFunctionGetTargetLibraries.cmake
 # The following macro will read the target libraries from the file 'target_libraries.cmake'
-ctkFunctionGetTargetLibraries(KIT_target_libraries)
+#ctkFunctionGetTargetLibraries(KIT_target_libraries)
+list(APPEND KIT_target_libraries )
+
 
 # If we use QtTessting, we add all the dependencies
 if(CTK_USE_QTTESTING)
@@ -201,29 +203,64 @@ endif()
 
 # Prefer QVTKOpenGLWidget to QVTKWidget when using Qt5
 set(_use_qvtkopenglwidget 1)
-if(CTK_QT_VERSION VERSION_LESS "5"
-  OR VTK_VERSION VERSION_LESS "8"
-  OR (NOT VTK_RENDERING_BACKEND STREQUAL "OpenGL2"))
-  set(_use_qvtkopenglwidget 0)
-endif()
-if(_use_qvtkopenglwidget)
+#if(CTK_QT_VERSION VERSION_LESS "5"
+#  OR VTK_VERSION VERSION_LESS "8"
+#  OR (NOT VTK_RENDERING_BACKEND STREQUAL "OpenGL2"))
+#  set(_use_qvtkopenglwidget 0)
+#endif()
+#if(_use_qvtkopenglwidget)
   add_definitions(-DCTK_USE_QVTKOPENGLWIDGET)
-endif()
+#endif()
 
-ctkMacroBuildLib(
-  NAME ${PROJECT_NAME}
-  EXPORT_DIRECTIVE ${KIT_export_directive}
-  SRCS ${KIT_SRCS}
-  MOC_SRCS ${KIT_MOC_SRCS}
-  UI_FORMS ${KIT_UI_FORMS}
-  TARGET_LIBRARIES ${KIT_target_libraries}
-  RESOURCES ${KIT_resources}
-  LIBRARY_TYPE ${CTK_LIBRARY_MODE}
-  )
 
-if(_use_qvtkopenglwidget)
+
+
+SET(CMAKE_AUTOUIC OFF)
+SET(CMAKE_AUTOMOC OFF)
+
+        qt5_wrap_ui(MY_UI_GENERATED_SRC  ${KIT_UI_FORMS})
+        qt5_wrap_cpp(MY_MOC  ${KIT_MOC_SRCS})
+
+
+
+
+add_library(
+  CTKVisualizationVTKWidgets STATIC
+  ${KIT_SRCS}
+    ${INCLUDES}
+    ${KIT_GENERATE_MOC_SRCS}
+    ${MY_MOC}
+    ${MY_UI_GENERATED_SRC}
+    ${KIT_resources}
+     
+
+)
+
+
+list(APPEND KIT_target_libraries  ${VTK_LIBRARIES} CTKVisualizationVTKCore CTKWidgets Qt5::Gui)
+
+
+
+
+
+
+generate_export_header(CTKVisualizationVTKWidgets EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/ctkVisualizationVTKWidgetsExport.h" EXPORT_MACRO_NAME "CTK_VISUALIZATION_VTK_WIDGETS_EXPORT")  
+target_include_directories(CTKVisualizationVTKWidgets PUBLIC ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}) 
+
+
+target_link_libraries(CTKVisualizationVTKWidgets PUBLIC ${KIT_target_libraries} )
+
+
+
+
+
+
+
+
+
+if(_use_qvtkopenglwidget) 
   target_compile_definitions(
-    ${PROJECT_NAME}
+    CTKVisualizationVTKWidgets
     INTERFACE
       CTK_USE_QVTKOPENGLWIDGET
     )
@@ -244,5 +281,5 @@ endif()
 
 # Testing
 if(BUILD_TESTING)
-  add_subdirectory(Testing)
+ add_subdirectory(Testing)
 endif()

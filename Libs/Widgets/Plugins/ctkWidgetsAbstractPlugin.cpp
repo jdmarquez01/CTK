@@ -22,7 +22,7 @@
 #include "ctkWidgetsAbstractPlugin.h"
 
 //-----------------------------------------------------------------------------
-ctkWidgetsAbstractPlugin::ctkWidgetsAbstractPlugin()
+ctkWidgetsAbstractPlugin::ctkWidgetsAbstractPlugin(QObject *parent)
 {
   this->Initialized = false;
 }

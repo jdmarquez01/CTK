@@ -1,4 +1,4 @@
-set(KIT ${PROJECT_NAME})
+set(KIT VTKVisualisationCore)
 
 #
 # Tests
@@ -17,11 +17,11 @@ endif()
 #
 # Tests expecting CTKData to be set
 #
-if(EXISTS "${CTKData_DIR}")
-  list(APPEND TEST_SOURCES
-    vtkLightBoxRendererManagerTest1.cpp
-    )
-endif()
+#if(EXISTS "${CTKData_DIR}")
+#  list(APPEND TEST_SOURCES
+#    vtkLightBoxRendererManagerTest1.cpp
+#    )
+#endif()
 
 #
 # Pre-requisites
@@ -40,12 +40,12 @@ set(KIT_HELPER_SRCS
   ctkVTKObjectTestHelper.cpp
   )
 
-if(CTK_QT_VERSION VERSION_GREATER "4")
+#if(CTK_QT_VERSION VERSION_GREATER "4")
   QT5_WRAP_CPP(KIT_HELPER_SRCS ctkVTKObjectTestHelper.h)
   include_directories(${Qt5Widgets_INCLUDE_DIRS})
-else()
-  QT4_WRAP_CPP(KIT_HELPER_SRCS ctkVTKObjectTestHelper.h)
-endif()
+#else()
+#  QT4_WRAP_CPP(KIT_HELPER_SRCS ctkVTKObjectTestHelper.h)
+#endif()
 
 #
 # Tests
@@ -63,8 +63,11 @@ REMOVE (TestsToRun ${KIT}CppTests.cpp)
 set(LIBRARY_NAME ${PROJECT_NAME})
 
 add_executable(${KIT}CppTests ${Tests} ${KIT_HELPER_SRCS})
-target_link_libraries(${KIT}CppTests ${LIBRARY_NAME} ${CTK_BASE_LIBRARIES})
+target_link_libraries(${KIT}CppTests  CTKCore CTKVisualizationVTKCore)
 
+
+add_custom_target(${KIT}CppTests_mocs DEPENDS  ${MY_MOC_GENERATED_SRC})
+add_dependencies(${KIT}CppTests ${KIT}CppTests_mocs)
 #
 # Add Tests
 #

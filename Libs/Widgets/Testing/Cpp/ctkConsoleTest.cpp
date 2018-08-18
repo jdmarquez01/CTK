@@ -24,7 +24,7 @@
 #include <QTimer>
 
 // CTK includes
-#include "ctkConfig.h"
+//#include "ctkConfig.h"
 #include "ctkConsole.h"
 #include "ctkTest.h"
 
@@ -69,7 +69,7 @@ void ctkConsoleTester::testRunFile_data()
   QTest::newRow("invalid") << " ";
   QTest::newRow(".") << ".";
   QTest::newRow("file")
-    << QFileInfo(QDir(CTK_SOURCE_DIR), "README").absoluteFilePath();
+    << QFileInfo(QDir("."), "README").absoluteFilePath();
 }
 
 // ----------------------------------------------------------------------------

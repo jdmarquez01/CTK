@@ -29,6 +29,34 @@ set(KIT_resources
 
 # Target libraries - See CMake/ctkFunctionGetTargetLibraries.cmake
 # The following macro will read the target libraries from the file 'target_libraries.cmake'
+
+
+find_package(PythonLibs)
+
+
+add_library(
+  CTKScriptingPythonWidgets STATIC
+  ${KIT_SRCS}
+  ${KIT_MOC_SRCS}
+    ${INCLUDES}
+    ${MY_MOC}
+    ${MY_UI_GENERATED_SRC}
+    ${KIT_resources}
+    ${KIT_GENERATE_MOC_SRCS}
+     
+
+)
+
+generate_export_header(CTKScriptingPythonWidgets EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/ctkScriptingPythonWidgetsExport.h" EXPORT_MACRO_NAME "CTK_SCRIPTING_PYTHON_WIDGETS_EXPORT")  
+target_include_directories(CTKScriptingPythonWidgets PUBLIC ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR}) 
+
+
+target_link_libraries(CTKScriptingPythonWidgets PUBLIC ${KIT_target_libraries} CTKScriptingPythonCore ctkWidgets ctkCore)
+
+
+
+if (false)
+
 ctkFunctionGetTargetLibraries(KIT_target_libraries)
 
 ctkMacroBuildLib(
@@ -49,6 +77,7 @@ if(CTK_WRAP_PYTHONQT_LIGHT)
     WRAPPER_LIBRARY_TYPE ${CTK_LIBRARY_MODE}
     )
 endif()
+endif()
 
 # Plugins
 if(CTK_BUILD_QTDESIGNER_PLUGINS)
@@ -56,6 +85,6 @@ if(CTK_BUILD_QTDESIGNER_PLUGINS)
 endif()
 
 # Testing
-if(BUILD_TESTING)
-  add_subdirectory(Testing)
-endif()
+#if(BUILD_TESTING)
+#  add_subdirectory(Testing)
+#endif()

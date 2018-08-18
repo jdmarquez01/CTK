@@ -105,7 +105,7 @@ set(KIT_SRCS
   ctkHistogram.h
   ctkIconEnginePlugin.cpp
   ctkIconEnginePlugin.h
-  ctkIconEnginePlugin_qt4.h
+  #ctkIconEnginePlugin_qt4.h
   ctkIconEnginePlugin_qt5.h
   ctkLanguageComboBox.cpp
   ctkLanguageComboBox.h
@@ -312,13 +312,15 @@ set(KIT_MOC_SRCS
   ctkWorkflowWidget.h
   ctkWorkflowWidgetStep.h
   ctkWorkflowWidgetStep_p.h
+
+
   )
 
-if(CTK_QT_VERSION VERSION_GREATER "4")
+#if(CTK_QT_VERSION VERSION_GREATER "4")
   list(APPEND KIT_MOC_SRCS ctkIconEnginePlugin_qt5.h)
-else()
-  list(APPEND KIT_MOC_SRCS ctkIconEnginePlugin_qt4.h)
-endif()
+#else()
+#  list(APPEND KIT_MOC_SRCS ctkIconEnginePlugin_qt4.h)
+#endif()
 
 # Headers that should run through moc without adding
 # the generated cpp file to the source list
@@ -351,11 +353,11 @@ set(KIT_resources
 
 # Target libraries - See CMake/ctkFunctionGetTargetLibraries.cmake
 # The following macro will read the target libraries from the file 'target_libraries.cmake'
-ctkFunctionGetTargetLibraries(KIT_target_libraries)
+#ctkFunctionGetTargetLibraries(KIT_target_libraries)
 
-if(CTK_QT_VERSION VERSION_GREATER "4")
+#if(CTK_QT_VERSION VERSION_GREATER "4")
   list(APPEND KIT_target_libraries Qt5::Widgets Qt5::Xml Qt5::OpenGL)
-endif()
+#endif()
 
 # A player and a translator must be added for custom Qt widgets
 if(CTK_USE_QTTESTING)
@@ -445,6 +447,50 @@ if(CTK_USE_QTTESTING)
   list(APPEND KIT_target_libraries QtTesting)
 endif()
 
+
+
+
+SET(CMAKE_AUTOUIC OFF)
+SET(CMAKE_AUTOMOC OFF)
+
+qt5_wrap_ui(MY_UI_GENERATED_SRC  ${KIT_UI_FORMS})
+qt5_wrap_cpp(MY_MOC  ${KIT_MOC_SRCS} )
+
+
+add_library(
+  CTKWidgets STATIC
+  ${KIT_SRCS}
+  ${KIT_MOC_SRCS}
+    ${INCLUDES}
+    ${MY_MOC}
+    ${MY_UI_GENERATED_SRC}
+    ${KIT_resources}
+    ${KIT_GENERATE_MOC_SRCS}
+     
+
+)
+
+generate_export_header(CTKWidgets EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/ctkWidgetsExport.h" EXPORT_MACRO_NAME "CTK_WIDGETS_EXPORT")  
+
+target_include_directories(CTKWidgets PUBLIC 
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> 
+  $<INSTALL_INTERFACE:include/CTKWidgets>
+  )
+
+
+
+target_link_libraries(CTKWidgets PUBLIC CTKCore ${KIT_target_libraries} ) 
+
+qt5_wrap_cpp(MY_MOC_GENERATED_SRC ${KIT_GENERATE_MOC_SRCS})
+add_custom_target(CTKWidgets_mocs DEPENDS  ${MY_MOC_GENERATED_SRC})
+add_dependencies(CTKWidgets CTKWidgets_mocs)
+
+
+
+
+## quitar
+if (false)
 ctkMacroBuildLib(
   NAME ${PROJECT_NAME}
   EXPORT_DIRECTIVE ${KIT_export_directive}
@@ -464,7 +510,7 @@ if(CTK_WRAP_PYTHONQT_LIGHT)
     WRAPPER_LIBRARY_TYPE ${CTK_LIBRARY_MODE}
     )
 endif()
-
+endif()
 # Plugins
 if(CTK_BUILD_QTDESIGNER_PLUGINS)
   add_subdirectory(Plugins)

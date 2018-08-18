@@ -138,8 +138,8 @@ vtkDiscretizableColorTransferChart::vtkDiscretizableColorTransferChart()
   this->SetActionToButton(ZOOM, -1);/// We don't want to zoom
   this->SetActionToButton(PAN, -1);/// Axes are not forced to bounds, disable panning
 
-  this->CompositeHiddenItem = CTK_NULLPTR;
-  this->ControlPoints = CTK_NULLPTR;
+  this->CompositeHiddenItem = Q_NULLPTR;
+  this->ControlPoints = Q_NULLPTR;
 
   this->rangeMoving = RangeMoving_NONE;
 
@@ -165,7 +165,7 @@ void vtkDiscretizableColorTransferChart::SetColorTransferFunction(
   vtkDiscretizableColorTransferFunction* function)
 {
   double range[2] = { VTK_DOUBLE_MAX, VTK_DOUBLE_MIN };
-  if (function != CTK_NULLPTR)
+  if (function != Q_NULLPTR)
   {
     range[0] = function->GetRange()[0];
     range[1] = function->GetRange()[1];
@@ -191,10 +191,10 @@ void vtkDiscretizableColorTransferChart::SetColorTransferFunction(
            << " " << this->CurrentRange[1];
 #endif
 
-  if (function == CTK_NULLPTR)
+  if (function == Q_NULLPTR)
   {
-    this->CompositeHiddenItem = CTK_NULLPTR;
-    this->ControlPoints = CTK_NULLPTR;
+    this->CompositeHiddenItem = Q_NULLPTR;
+    this->ControlPoints = Q_NULLPTR;
 
 #ifdef DEBUG_RANGE
   qDebug() << "DEBUG_RANGE data range = " << this->DataRange[0]
@@ -478,8 +478,8 @@ void vtkDiscretizableColorTransferChart::SetCurrentRange(
 // ----------------------------------------------------------------------------
 void vtkDiscretizableColorTransferChart::RemapColorTransferFunction()
 {
-  if (this->ColorTransferFunction == CTK_NULLPTR
-   || this->ControlPoints == CTK_NULLPTR)
+  if (this->ColorTransferFunction == Q_NULLPTR
+   || this->ControlPoints == Q_NULLPTR)
   {
     return;
   }
@@ -583,7 +583,7 @@ vtkDiscretizableColorTransferChart::GetControlPointsItem()
 // ----------------------------------------------------------------------------
 bool vtkDiscretizableColorTransferChart::IsProcessingColorTransferFunction() const
 {
-  if (this->ControlPoints == CTK_NULLPTR)
+  if (this->ControlPoints == Q_NULLPTR)
   {
     return false;
   }

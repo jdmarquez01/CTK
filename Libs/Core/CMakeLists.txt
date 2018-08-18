@@ -8,7 +8,7 @@ project(CTKCore)
 set(CMAKE_MODULE_PATH ${CTKCore_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH})
 
 # CMake Macros
-include(CMake/ctkMacroBFDCheck.cmake) # HAVE_BFD will be set to True if it applies
+#include(CMake/ctkMacroBFDCheck.cmake) # HAVE_BFD will be set to True if it applies
 
 #
 # See CTK/CMake/ctkMacroBuildLib.cmake for details
@@ -127,47 +127,67 @@ set(KIT_resources
 # The following macro will read the target libraries from the file 'target_libraries.cmake'
 set(KIT_target_libraries)
 
-ctkFunctionGetTargetLibraries(KIT_target_libraries)
+#ctkFunctionGetTargetLibraries(KIT_target_libraries)
 
-if(CTK_QT_VERSION VERSION_GREATER "4")
-  list(APPEND KIT_target_libraries Qt5::Core)
-endif()
 
-ctkMacroBuildLib(
-  NAME ${PROJECT_NAME}
-  EXPORT_DIRECTIVE ${KIT_export_directive}
-  SRCS ${KIT_SRCS}
-  MOC_SRCS ${KIT_MOC_SRCS}
-  UI_FORMS ${KIT_UI_FORMS}
-  TARGET_LIBRARIES ${KIT_target_libraries}
-  RESOURCES ${KIT_resources}
-  LIBRARY_TYPE ${CTK_LIBRARY_MODE}
-  )
+
+
+SET(CMAKE_AUTOUIC OFF)
+SET(CMAKE_AUTOMOC OFF)
+
+
+
+qt5_wrap_ui(MY_UI_GENERATED_SRC  ${KIT_UI_FORMS})
+qt5_wrap_cpp(MY_MOC  ${KIT_MOC_SRCS})
+
+
+
+add_library(
+  CTKCore STATIC
+  ${KIT_SRCS}
+  ${INCLUDES}
+  ${KIT_GENERATE_MOC_SRCS}
+  ${MY_MOC}
+  ${MY_UI_GENERATED_SRC}
+  ${KIT_resources}
+)
+
+generate_export_header(CTKCore EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/ctkCoreExport.h" EXPORT_MACRO_NAME "CTK_CORE_EXPORT")  
+
+target_include_directories(CTKCore PUBLIC 
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<INSTALL_INTERFACE:include/CTKCore>
+)
+
+
+
+target_link_libraries(CTKCore PUBLIC Qt5::Core)
+
 
 # Needed for ctkBackTrace
 if(UNIX)
   # FreeBSD: The same functionality that is in linux's libdl is provided in FreeBSD's libc
   find_library(HAVE_LIBDL dl)
   if(HAVE_LIBDL)
-    target_link_libraries(${PROJECT_NAME} dl)
+    target_link_libraries(CTKCore PRIVATE dl)
   endif()
 elseif(WIN32 AND NOT MINGW)
-  target_link_libraries(${PROJECT_NAME} dbghelp)
+  target_link_libraries(CTKCore PRIVATE dbghelp)
 endif()
 
-if(CTK_WRAP_PYTHONQT_LIGHT)
-  ctkMacroBuildLibWrapper(
-    TARGET ${PROJECT_NAME}
-    SRCS ${KIT_SRCS}
-    WRAPPER_LIBRARY_TYPE ${CTK_LIBRARY_MODE}
-    )
-endif()
+#if(CTK_WRAP_PYTHONQT_LIGHT)
+#  ctkMacroBuildLibWrapper(
+#    TARGET ${PROJECT_NAME}
+#    SRCS ${KIT_SRCS}
+#    WRAPPER_LIBRARY_TYPE ${CTK_LIBRARY_MODE}
+#    )
+#endif()
 
 
 # Testing
 if(BUILD_TESTING)
   add_subdirectory(Testing)
-
   # Compile source code snippets
   add_subdirectory(Documentation/Snippets)
 endif()
