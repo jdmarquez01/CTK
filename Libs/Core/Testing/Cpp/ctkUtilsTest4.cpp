@@ -25,8 +25,6 @@
 #include <QTime>
 
 // CTK includes
-#include "ctkCoreTestingMacros.h"
-#include "ctkScopedCurrentDir.h"
 #include "ctkUtils.h"
 
 // STD includes
@@ -36,7 +34,7 @@
 namespace
 {
 //-----------------------------------------------------------------------------
-int createFile(int line, const QDir& dir, const QString& relativePath, const QString& fileName)
+bool createFile(int line, const QDir& dir, const QString& relativePath, const QString& fileName)
 {
   QDir newDir(dir);
   newDir.mkpath(relativePath);
@@ -51,10 +49,10 @@ int createFile(int line, const QDir& dir, const QString& relativePath, const QSt
   if (!QFile::exists(filePath))
     {
     std::cerr << "Line " << line << " - Failed to create file" << qPrintable(filePath) << std::endl;
-    return EXIT_FAILURE;
+    return false;
     }
 
-  return EXIT_SUCCESS;
+  return true;
 }
 
 } // end of anonymous namespace
@@ -76,7 +74,6 @@ int ctkUtilsTest4(int argc, char * argv [] )
 
   // Attempt to delete nonexistent relative directory
   QString nonexistentRelativeDirPath = temporaryDirName;
-  CHECK_BOOL(QDir(nonexistentRelativeDirPath).exists(), false);
   if (ctk::removeDirRecursively(nonexistentRelativeDirPath))
     {
     std::cerr << "Line " << __LINE__ << " - Problem with ctk::removeDirRecursively() !"
@@ -86,8 +83,7 @@ int ctkUtilsTest4(int argc, char * argv [] )
     }
 
   // Attempt to delete nonexistent absolute directory
-  QString nonexistentAbsoluteDirPath = QFileInfo(tmp, temporaryDirName).absoluteFilePath();
-  CHECK_BOOL(QDir(nonexistentAbsoluteDirPath).exists(), false);
+  QString nonexistentAbsoluteDirPath = QFileInfo(tmp, temporaryDirName).dir().absolutePath();
   if (ctk::removeDirRecursively(nonexistentAbsoluteDirPath))
     {
     std::cerr << "Line " << __LINE__ << " - Problem with ctk::removeDirRecursively() !"
@@ -96,47 +92,28 @@ int ctkUtilsTest4(int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  // Absolute path
-  {
-    // Create a directory structure
-    CHECK_BOOL(tmp.mkdir(temporaryDirName), true);
-    QDir caseTmp = QDir(tmp);
-    CHECK_BOOL(caseTmp.cd(temporaryDirName), true);
-    CHECK_EXIT_SUCCESS(createFile(__LINE__, caseTmp, "foo", "a.txt"));
-    CHECK_EXIT_SUCCESS(createFile(__LINE__, caseTmp, "foo/bar", "b.txt"));
-    CHECK_EXIT_SUCCESS(createFile(__LINE__, caseTmp, "foo/zoo", "c.txt"));
+  // Create a directory structure
+  tmp.mkdir(temporaryDirName);
+  tmp.cd(temporaryDirName);
+  if (!createFile(__LINE__, tmp, "foo", "a.txt"))
+    {
+    return EXIT_FAILURE;
+    }
+  if (!createFile(__LINE__, tmp, "foo/bar", "b.txt"))
+    {
+    return EXIT_FAILURE;
+    }
+  if (!createFile(__LINE__, tmp, "foo/zoo", "c.txt"))
+    {
+    return EXIT_FAILURE;
+    }
 
-    if (!ctk::removeDirRecursively(caseTmp.absolutePath()))
-      {
-      std::cerr << "Line " << __LINE__ << " - Problem with ctk::removeDirRecursively()"
-                << " - Failed to delete directory:" << qPrintable(caseTmp.absolutePath()) << std::endl;
-      return EXIT_FAILURE;
-      }
-    CHECK_BOOL(caseTmp.exists(), false);
-  }
-
-  // Relative path
-  {
-    // Create a directory structure
-    CHECK_BOOL(tmp.mkdir(temporaryDirName), true);
-    QDir caseTmp = QDir(tmp);
-    CHECK_BOOL(caseTmp.cd(temporaryDirName), true);
-    CHECK_EXIT_SUCCESS(createFile(__LINE__, caseTmp, "foo", "a.txt"));
-    CHECK_EXIT_SUCCESS(createFile(__LINE__, caseTmp, "foo/bar", "b.txt"));
-    CHECK_EXIT_SUCCESS(createFile(__LINE__, caseTmp, "foo/zoo", "c.txt"));
-
-    ctkScopedCurrentDir currentDir(tmp.path());
-
-    if (!ctk::removeDirRecursively(temporaryDirName))
-      {
-      std::cerr << "Line " << __LINE__ << " - Problem with ctk::removeDirRecursively()"
-                << " - Failed to delete directory:" << qPrintable(temporaryDirName)
-                << " - Current directory:" << qPrintable(QDir::currentPath())
-                << std::endl;
-      return EXIT_FAILURE;
-      }
-    CHECK_BOOL(caseTmp.exists(), false);
-  }
+  if (!ctk::removeDirRecursively(tmp.absolutePath()))
+    {
+    std::cerr << "Line " << __LINE__ << " - Problem with ctk::removeDirRecursively()"
+              << " - Failed to delete directory:" << qPrintable(tmp.absolutePath()) << std::endl;
+    return EXIT_FAILURE;
+    }
 
   return EXIT_SUCCESS;
 }

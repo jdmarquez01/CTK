@@ -1,9 +1,12 @@
-project(CTKVisualizationVTKCore)
+
 
 #
 # 3rd party dependencies
 #
+
+find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
+
 if(NOT DEFINED VTK_RENDERING_BACKEND)
   set(VTK_RENDERING_BACKEND "OpenGL")
 endif()
@@ -164,18 +167,48 @@ endif()
 
 # Target libraries - See CMake/ctkFunctionGetTargetLibraries.cmake
 # The following macro will read the target libraries from the file 'target_libraries.cmake'
-ctkFunctionGetTargetLibraries(KIT_target_libraries)
+#ctkFunctionGetTargetLibraries(KIT_target_libraries)
 
-ctkMacroBuildLib(
-  NAME ${PROJECT_NAME}
-  EXPORT_DIRECTIVE ${KIT_export_directive}
-  SRCS ${KIT_SRCS}
-  MOC_SRCS ${KIT_MOC_SRCS}
-  UI_FORMS ${KIT_UI_FORMS}
-  TARGET_LIBRARIES ${KIT_target_libraries}
-  RESOURCES ${KIT_resources}
-  LIBRARY_TYPE ${CTK_LIBRARY_MODE}
-  )
+SET(CMAKE_AUTOUIC OFF)
+SET(CMAKE_AUTOMOC OFF)
+
+        qt5_wrap_ui(MY_UI_GENERATED_SRC  ${KIT_UI_FORMS})
+        qt5_wrap_cpp(MY_MOC  ${KIT_MOC_SRCS})
+
+
+
+
+add_library(
+  CTKVisualizationVTKCore STATIC
+  ${KIT_SRCS}
+    ${INCLUDES}
+    ${KIT_GENERATE_MOC_SRCS}
+    ${MY_MOC}
+    ${MY_UI_GENERATED_SRC}
+    ${KIT_resources}
+     
+
+)
+
+
+list(APPEND KIT_target_libraries ${VTK_LIBRARIES} ctkCore Qt5::Core)
+
+
+
+
+
+
+generate_export_header(CTKVisualizationVTKCore EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/ctkVisualizationVTKCoreExport.h" EXPORT_MACRO_NAME "CTK_VISUALIZATION_VTK_CORE_EXPORT")  
+target_include_directories(CTKVisualizationVTKCore PUBLIC ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}) 
+
+
+target_link_libraries(CTKVisualizationVTKCore PUBLIC ${KIT_target_libraries} )
+
+
+
+
+
+
 
 if(CTK_WRAP_PYTHONQT_LIGHT)
   ctkMacroBuildLibWrapper(
@@ -191,6 +224,6 @@ endif()
 #endif()
 
 # Testing
-if(BUILD_TESTING)
-  add_subdirectory(Testing)
-endif()
+#if(BUILD_TESTING)
+#  add_subdirectory(Testing)
+#endif()

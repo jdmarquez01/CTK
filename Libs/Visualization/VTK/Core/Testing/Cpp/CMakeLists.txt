@@ -17,11 +17,11 @@ endif()
 #
 # Tests expecting CTKData to be set
 #
-if(EXISTS "${CTKData_DIR}")
-  list(APPEND TEST_SOURCES
-    vtkLightBoxRendererManagerTest1.cpp
-    )
-endif()
+#if(EXISTS "${CTKData_DIR}")
+#  list(APPEND TEST_SOURCES
+#    vtkLightBoxRendererManagerTest1.cpp
+#    )
+#endif()
 
 #
 # Pre-requisites
