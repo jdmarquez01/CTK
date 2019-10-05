@@ -51,7 +51,7 @@ generate_export_header(CTKScriptingPythonWidgets EXPORT_FILE_NAME "${CMAKE_CURRE
 target_include_directories(CTKScriptingPythonWidgets PUBLIC ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR}) 
 
 
-target_link_libraries(CTKScriptingPythonWidgets PUBLIC ${KIT_target_libraries} CTKScriptingPythonCore ctkWidgets ctkCore)
+target_link_libraries(CTKScriptingPythonWidgets PUBLIC ${KIT_target_libraries} CTKScriptingPythonCore CTKWidgets CTKCore)
 
 
 
