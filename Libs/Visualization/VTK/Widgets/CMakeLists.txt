@@ -282,14 +282,14 @@ list(APPEND KIT_target_libraries  ${VTK_LIBRARIES} CTKVisualizationVTKCore CTKWi
 
 
 
-generate_export_header(CTKVisualizationVTKWidgets EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/CTKVisualizationVTKWidgets.h" EXPORT_MACRO_NAME "CTK_VISUALIZATION_VTK_WIDGETS_EXPORT")
+generate_export_header(CTKVisualizationVTKWidgets EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/CTKVisualizationVTKWidgetsExport.h" EXPORT_MACRO_NAME "CTK_VISUALIZATION_VTK_WIDGETS_EXPORT")
 target_include_directories(CTKVisualizationVTKWidgets PUBLIC ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}) 
 
 
 target_link_libraries(CTKVisualizationVTKWidgets PUBLIC ${KIT_target_libraries} )
 
 
-set(ALL_HEADER "${PUBLIC_HEADER}" "${CMAKE_CURRENT_BINARY_DIR}/CTKVisualizationVTKWidgets.h")
+set(ALL_HEADER "${PUBLIC_HEADER}" "${CMAKE_CURRENT_BINARY_DIR}/CTKVisualizationVTKWidgetsExport.h")
 
 message("__> ${ALL_HEADER}")
 
