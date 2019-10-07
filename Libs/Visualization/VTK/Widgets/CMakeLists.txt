@@ -7,6 +7,44 @@ include(${VTK_USE_FILE})
 
 set(KIT_export_directive "CTK_VISUALIZATION_VTK_WIDGETS_EXPORT")
 
+
+
+set(PUBLIC_HEADER
+
+    ctkVTKAbstractMatrixWidget.h
+    ctkVTKAbstractMatrixWidget_p.h
+    ctkVTKAbstractView.h
+    ctkVTKAbstractView_p.h
+    ctkVTKChartView.h
+    ctkVTKColorTransferFunction.h
+    ctkVTKCompositeFunction.h
+    ctkVTKDataSetArrayComboBox.h
+    ctkVTKDataSetModel.h
+    ctkVTKDiscretizableColorTransferWidget.h
+    ctkVTKHistogram.h
+    ctkVTKLookupTable.h
+    ctkVTKMagnifyView.h
+    ctkVTKMagnifyView_p.h
+    ctkVTKMatrixWidget.h
+    ctkVTKPiecewiseFunction.h
+    ctkVTKPropertyWidget.h
+    ctkVTKRenderView.h
+    ctkVTKRenderViewEventPlayer.h
+    ctkVTKRenderViewEventTranslator.h
+    ctkVTKRenderView_p.h
+    ctkVTKScalarBarWidget.h
+    ctkVTKScalarsToColorsComboBox.h
+    ctkVTKScalarsToColorsView.h
+    ctkVTKScalarsToColorsWidget.h
+    ctkVTKSliceView.h
+    ctkVTKSliceView_p.h
+    ctkVTKSurfaceMaterialPropertyWidget.h
+    ctkVTKTextPropertyWidget.h
+    ctkVTKThresholdWidget.h
+    ctkVTKThumbnailView.h
+    ctkVTKVolumePropertyWidget.h
+    ctkVTKWidgetsUtils.h
+    ctkVisualizationVTKWidgetsPythonQtDecorators.h)
 #
 # Add the libraries QtTesting
 #
@@ -244,14 +282,25 @@ list(APPEND KIT_target_libraries  ${VTK_LIBRARIES} CTKVisualizationVTKCore CTKWi
 
 
 
-generate_export_header(CTKVisualizationVTKWidgets EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/ctkVisualizationVTKWidgetsExport.h" EXPORT_MACRO_NAME "CTK_VISUALIZATION_VTK_WIDGETS_EXPORT")  
+generate_export_header(CTKVisualizationVTKWidgets EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/CTKVisualizationVTKWidgets.h" EXPORT_MACRO_NAME "CTK_VISUALIZATION_VTK_WIDGETS_EXPORT")
 target_include_directories(CTKVisualizationVTKWidgets PUBLIC ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}) 
 
 
 target_link_libraries(CTKVisualizationVTKWidgets PUBLIC ${KIT_target_libraries} )
 
 
+set(ALL_HEADER "${PUBLIC_HEADER}" "${CMAKE_CURRENT_BINARY_DIR}/CTKVisualizationVTKWidgets.h")
 
+message("__> ${ALL_HEADER}")
+
+set_target_properties(CTKVisualizationVTKWidgets PROPERTIES PUBLIC_HEADER "${ALL_HEADER}")
+
+install(TARGETS CTKVisualizationVTKWidgets
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        PUBLIC_HEADER DESTINATION include/CTKVisualizationVTKWidgets
+        ARCHIVE DESTINATION lib
+        )
 
 
 

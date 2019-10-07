@@ -6,6 +6,10 @@ find_package(Qt5 COMPONENTS Core Widgets Gui Xml Help OpenGL)
 find_package(Python3 COMPONENTS Interpreter Development)
 find_package(VTK REQUIRED)
 
+set(CMAKE_INSTALL_PREFIX
+    "${CMAKE_BINARY_DIR}/install"
+    CACHE FILEPATH "${CMAKE_BINARY_DIR}/install")
+
 ExternalProject_Add(PythonQt-ep
   GIT_REPOSITORY https://github.com/jdmarquez01/PythonQt.git
   GIT_TAG patched-8

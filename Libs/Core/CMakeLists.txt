@@ -16,6 +16,54 @@ set(CMAKE_MODULE_PATH ${CTKCore_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH})
 
 set(KIT_export_directive "CTK_CORE_EXPORT")
 
+
+set (HEADERS
+ctkAbstractFactory.h                 
+ctkBackTrace.h                       
+ctkCorePythonQtDecorators.h          
+ctkErrorLogFDMessageHandler.h        
+ctkException.h                       
+ctkPimpl.h                           
+ctkWorkflow.h
+ctkAbstractFileBasedFactory.h        
+ctkBinaryFileDescriptor.h            
+ctkCoreTestingMacros.h               
+ctkErrorLogFDMessageHandler_p.h      
+ctkFileLogger.h                      
+ctkScopedCurrentDir.h                
+ctkWorkflowStep.h
+ctkAbstractLibraryFactory.h          
+ctkBooleanMapper.h                   
+ctkCoreTestingUtilities.h            
+ctkErrorLogLevel.h                   
+ctkHighPrecisionTimer.h              
+ctkSetName.h                         
+ctkWorkflowStep_p.h
+ctkAbstractObjectFactory.h           
+ctkCallback.h                        
+ctkDependencyGraph.h                 
+ctkErrorLogQtMessageHandler.h        
+ctkLinearValueProxy.h                
+ctkSingleton.h                       
+ctkWorkflowTransitions.h
+ctkAbstractPluginFactory.h           
+ctkCommandLineParser.h               
+ctkErrorLogAbstractMessageHandler.h  
+ctkErrorLogStreamMessageHandler.h    
+ctkLogger.h                          
+ctkUtils.h                           
+ctkWorkflow_p.h
+ctkAbstractQObjectFactory.h          
+ctkCompilerDetections_p.h            
+ctkErrorLogContext.h                 
+ctkErrorLogTerminalOutput.h          
+ctkModelTester.h                     
+ctkValueProxy.h
+)
+
+
+
+
 # Source files
 set(KIT_SRCS
   ctkAbstractFactory.h
@@ -143,7 +191,7 @@ qt5_wrap_cpp(MY_MOC  ${KIT_MOC_SRCS})
 
 
 add_library(
-  CTKCore STATIC
+  CTKCore 
   ${KIT_SRCS}
   ${INCLUDES}
   ${KIT_GENERATE_MOC_SRCS}
@@ -152,7 +200,10 @@ add_library(
   ${KIT_resources}
 )
 
-generate_export_header(CTKCore EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/ctkCoreExport.h" EXPORT_MACRO_NAME "CTK_CORE_EXPORT")  
+generate_export_header(CTKCore EXPORT_FILE_NAME ${CMAKE_CURRENT_BINARY_DIR}/ctkCoreExport.h EXPORT_MACRO_NAME "CTK_CORE_EXPORT")
+
+
+
 
 target_include_directories(CTKCore PUBLIC 
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
@@ -161,8 +212,22 @@ target_include_directories(CTKCore PUBLIC
 )
 
 
+set(ALL_HEADER "${HEADERS}" "${CMAKE_CURRENT_BINARY_DIR}/ctkCoreExport.h")
+
+message("__> ${ALL_HEADER}")
+
+set_target_properties(CTKCore PROPERTIES PUBLIC_HEADER "${ALL_HEADER}")
 
 target_link_libraries(CTKCore PUBLIC Qt5::Core)
+
+install(TARGETS CTKCore 
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        PUBLIC_HEADER DESTINATION include/CTKCore
+        ARCHIVE DESTINATION lib
+        )
+
+
 
 
 # Needed for ctkBackTrace

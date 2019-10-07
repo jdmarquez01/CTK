@@ -18,6 +18,21 @@ endif()
 #
 # See CTK/CMake/ctkMacroBuildLib.cmake for details
 #
+set(PUBLIC_HEADER
+ctkVTKConnection.h
+ctkVTKConnection_p.h
+ctkVTKErrorLogMessageHandler.h
+ctkVTKObject.h
+ctkVTKObjectEventsObserver.h
+ctkVTKPythonQtWrapperFactory.h
+ctkVTKScalarsToColorsUtils.h
+vtkDiscretizableColorTransferChart.h
+vtkDiscretizableColorTransferControlPointsItem.h
+vtkLightBoxRendererManager.h
+vtkScalarsToColorsContextItem.h
+vtkScalarsToColorsHistogramChart.h
+vtkScalarsToColorsPreviewChart.h
+)
 
 set(KIT_export_directive "CTK_VISUALIZATION_VTK_CORE_EXPORT")
 
@@ -205,6 +220,18 @@ target_include_directories(CTKVisualizationVTKCore PUBLIC ${CMAKE_CURRENT_BINARY
 target_link_libraries(CTKVisualizationVTKCore PUBLIC ${KIT_target_libraries} )
 
 
+set(ALL_HEADER "${PUBLIC_HEADER}" "${CMAKE_CURRENT_BINARY_DIR}/ctkVisualizationVTKCoreExport.h")
+
+message("__> ${ALL_HEADER}")
+
+set_target_properties(CTKVisualizationVTKCore PROPERTIES PUBLIC_HEADER "${ALL_HEADER}")
+
+install(TARGETS CTKVisualizationVTKCore
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        PUBLIC_HEADER DESTINATION include/CTKVisualizationVTKCore
+        ARCHIVE DESTINATION lib
+        )
 
 
 
