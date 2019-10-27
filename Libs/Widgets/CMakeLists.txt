@@ -597,7 +597,7 @@ qt5_wrap_cpp(MY_MOC  ${KIT_MOC_SRCS} )
 
 
 add_library(
-  CTKWidgets STATIC
+  CTKWidgets
   ${KIT_SRCS}
   ${KIT_MOC_SRCS}
     ${INCLUDES}

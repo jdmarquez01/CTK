@@ -92,6 +92,8 @@ set(KIT_SRCS
   ctkDependencyGraph.h
   ctkErrorLogAbstractMessageHandler.cpp
   ctkErrorLogAbstractMessageHandler.h
+  ctkErrorLogAbstractModel.cpp
+  ctkErrorLogAbstractModel.h
   ctkErrorLogContext.h
   ctkErrorLogFDMessageHandler.cpp
   ctkErrorLogFDMessageHandler.h
@@ -147,6 +149,7 @@ set(KIT_MOC_SRCS
   ctkCallback.h
   ctkCommandLineParser.h
   ctkErrorLogAbstractMessageHandler.h
+  ctkErrorLogAbstractModel.h
   ctkErrorLogFDMessageHandler_p.h
   ctkErrorLogLevel.h
   ctkErrorLogQtMessageHandler.h

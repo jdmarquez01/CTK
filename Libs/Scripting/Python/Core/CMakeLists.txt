@@ -50,7 +50,7 @@ find_package(PythonLibs)
 
 
 add_library(
-  CTKScriptingPythonCore STATIC
+  CTKScriptingPythonCore
   ${KIT_SRCS}
   ${KIT_MOC_SRCS}
     ${INCLUDES}
@@ -70,6 +70,21 @@ target_link_libraries(CTKScriptingPythonCore PUBLIC ${KIT_target_libraries} Pyth
 
     ${QT_PYTHON_WRAPPED_LIBRARIES_LIST}
     )
+
+
+
+set(ALL_HEADER "ctkAbstractPythonManager.h" "${CMAKE_CURRENT_BINARY_DIR}/ctkScriptingPythonCoreExport.h")
+set_target_properties(CTKScriptingPythonCore PROPERTIES PUBLIC_HEADER "${ALL_HEADER}")
+
+
+
+install(TARGETS CTKScriptingPythonCore
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        PUBLIC_HEADER DESTINATION include/CTKScriptingPythonCore
+        ARCHIVE DESTINATION lib
+        )
+
 
 if (false)
 ctkMacroBuildLib(

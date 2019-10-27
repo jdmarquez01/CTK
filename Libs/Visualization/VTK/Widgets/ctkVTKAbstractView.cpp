@@ -48,7 +48,7 @@ int ctkVTKAbstractViewPrivate::MultiSamples = 0;  // Default for static var
 ctkVTKAbstractViewPrivate::ctkVTKAbstractViewPrivate(ctkVTKAbstractView& object)
   : q_ptr(&object)
 {
-#if CTK_USE_QVTKOPENGLWIDGET
+#ifdef CTK_USE_QVTKOPENGLWIDGET
   this->RenderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
 #else
   this->RenderWindow = vtkSmartPointer<vtkRenderWindow>::New();
@@ -60,6 +60,7 @@ ctkVTKAbstractViewPrivate::ctkVTKAbstractViewPrivate(ctkVTKAbstractView& object)
   this->FPSVisible = false;
   this->FPSTimer = 0;
   this->FPS = 0;
+  this->PauseRenderCount = 0;
 }
 
 // --------------------------------------------------------------------------
@@ -68,14 +69,11 @@ void ctkVTKAbstractViewPrivate::init()
   Q_Q(ctkVTKAbstractView);
 
   this->setParent(q);
-
-#if CTK_USE_QVTKOPENGLWIDGET
-  this->VTKWidget = new QVTKOpenGLWidget;
+  this->VTKWidget = new ctkVTKOpenGLNativeWidget;
+#ifdef CTK_USE_QVTKOPENGLWIDGET
   this->VTKWidget->setEnableHiDPI(true);
   QObject::connect(this->VTKWidget, SIGNAL(resized()),
                    q, SLOT(forceRender()));
-#else
-  this->VTKWidget = new QVTKWidget;
 #endif
   q->setLayout(new QVBoxLayout);
   q->layout()->setMargin(0);
@@ -85,7 +83,7 @@ void ctkVTKAbstractViewPrivate::init()
   this->RequestTimer = new QTimer(q);
   this->RequestTimer->setSingleShot(true);
   QObject::connect(this->RequestTimer, SIGNAL(timeout()),
-                   q, SLOT(forceRender()));
+                   q, SLOT(requestRender()));
 
   this->FPSTimer = new QTimer(q);
   this->FPSTimer->setInterval(1000);
@@ -197,7 +195,7 @@ void ctkVTKAbstractView::scheduleRender()
     {
     // If the request comes from the system (widget exposed, resized...), the
     // render must be done immediately.
-    this->forceRender();
+    this->requestRender();
     }
   else if (!d->RequestTime.isValid())
     {
@@ -210,8 +208,20 @@ void ctkVTKAbstractView::scheduleRender()
     // have already been elapsed, it is likely that RequestTimer has already
     // timed out, but the event queue hasn't been processed yet, rendering is
     // done now to ensure the desired framerate is respected.
-    this->forceRender();
+    this->requestRender();
     }
+}
+
+//----------------------------------------------------------------------------
+void ctkVTKAbstractView::requestRender()
+{
+  Q_D(const ctkVTKAbstractView);
+
+  if (this->isRenderPaused())
+    {
+    return;
+    }
+  this->forceRender();
 }
 
 //----------------------------------------------------------------------------
@@ -240,6 +250,58 @@ void ctkVTKAbstractView::forceRender()
     return;
     }
   d->RenderWindow->Render();
+}
+
+//----------------------------------------------------------------------------
+bool ctkVTKAbstractView::isRenderPaused()const
+{
+  Q_D(const ctkVTKAbstractView);
+  return d->PauseRenderCount > 0;
+}
+
+//----------------------------------------------------------------------------
+int ctkVTKAbstractView::pauseRender()
+{
+  Q_D(ctkVTKAbstractView);
+  ++d->PauseRenderCount;
+  return d->PauseRenderCount;
+}
+
+//----------------------------------------------------------------------------
+int ctkVTKAbstractView::resumeRender()
+{
+  Q_D(ctkVTKAbstractView);
+  if (d->PauseRenderCount > 0)
+    {
+    --d->PauseRenderCount;
+    }
+  else
+    {
+    qWarning() << Q_FUNC_INFO << "Cannot resume rendering, pause render count is already 0!";
+    }
+
+  // If the rendering is not paused and has been scheduled, call scheduleRender
+  if (!this->isRenderPaused() && d->RequestTimer && d->RequestTime.isValid())
+    {
+    this->scheduleRender();
+    }
+  return d->PauseRenderCount;
+}
+
+//----------------------------------------------------------------------------
+int ctkVTKAbstractView::setRenderPaused(bool pause)
+{
+  Q_D(const ctkVTKAbstractView);
+
+  if (pause)
+    {
+    this->pauseRender();
+    }
+  else
+    {
+    this->resumeRender();
+    }
+  return d->PauseRenderCount;
 }
 
 //----------------------------------------------------------------------------
@@ -296,11 +358,7 @@ vtkCornerAnnotation* ctkVTKAbstractView::cornerAnnotation() const
 }
 
 //----------------------------------------------------------------------------
-#if CTK_USE_QVTKOPENGLWIDGET
-QVTKOpenGLWidget * ctkVTKAbstractView::VTKWidget() const
-#else
-QVTKWidget * ctkVTKAbstractView::VTKWidget() const
-#endif
+ctkVTKOpenGLNativeWidget * ctkVTKAbstractView::VTKWidget() const
 {
   Q_D(const ctkVTKAbstractView);
   return d->VTKWidget;
@@ -480,7 +538,7 @@ void ctkVTKAbstractView::setUseDepthPeeling(bool useDepthPeeling)
     }
   this->renderWindow()->SetMultiSamples(useDepthPeeling ? 0 : nSamples);
   renderer->SetUseDepthPeeling(useDepthPeeling ? 1 : 0);
-#if CTK_USE_QVTKOPENGLWIDGET
+#ifdef CTK_USE_QVTKOPENGLWIDGET
   renderer->SetUseDepthPeelingForVolumes(useDepthPeeling);
 #endif
 }

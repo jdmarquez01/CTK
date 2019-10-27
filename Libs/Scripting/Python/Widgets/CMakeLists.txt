@@ -55,6 +55,22 @@ target_link_libraries(CTKScriptingPythonWidgets PUBLIC ${KIT_target_libraries} C
 
 
 
+
+set(ALL_HEADER "ctkPythonConsole.h" "${CMAKE_CURRENT_BINARY_DIR}/ctkScriptingPythonWidgetsExport.h")
+set_target_properties(CTKScriptingPythonWidgets PROPERTIES PUBLIC_HEADER "${ALL_HEADER}")
+
+
+
+
+install(TARGETS CTKScriptingPythonWidgets
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        PUBLIC_HEADER DESTINATION include/CTKScriptingPythonWidgets
+        ARCHIVE DESTINATION lib
+        )
+
+
+
 if (false)
 
 ctkFunctionGetTargetLibraries(KIT_target_libraries)

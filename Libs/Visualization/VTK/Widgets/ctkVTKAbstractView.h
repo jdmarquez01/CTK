@@ -24,14 +24,8 @@
 // Qt includes
 #include <QWidget>
 
-// VTK includes
-#if CTK_USE_QVTKOPENGLWIDGET
-#include <QVTKOpenGLWidget.h>
-#else
-#include <QVTKWidget.h>
-#endif
-
 // CTK includes
+#include "ctkVTKOpenGLNativeWidget.h"
 #include "ctkVTKObject.h"
 #include "ctkVisualizationVTKWidgetsExport.h"
 class ctkVTKAbstractViewPrivate;
@@ -81,6 +75,37 @@ public Q_SLOTS:
   /// application. It is preferable to use scheduleRender() instead.
   /// \sa scheduleRender
   virtual void forceRender();
+
+  /// Calls pauseRender() if pause is true or resumeRender() if pause is false
+  /// When pause render count is greater than 0, prevents requestRender() from calling forceRender()
+  /// Callers are responsible for calling both setPauseRender(true) and setPauseRender(false)
+  /// Ex.
+  /// \code{.cpp}
+  ///  view->pauseRender() // Or setPauseRender(true)
+  /// // Perform operations that may call view->scheduleRender().
+  /// view->resumeRender(); // Or setPauseRender(false)
+  /// \endcode
+  ///
+  /// If the pause render count reaches zero when calling resumeRender(), scheduleRender() will be
+  /// called if a scheduleRender() was invoked while rendering was paused.
+  /// Rendering can still be triggered while the paused with forceRender()
+  /// 
+  /// This behaviour is different from renderEnabled(), which will prevent all rendering calls
+  /// from both scheduleRender() and forceRender(), and will not invoke either when re-enabled.
+  /// \sa renderEnabled
+  virtual int setRenderPaused(bool pause);
+
+  /// Increments the pause render count
+  /// \sa setPauseRender
+  virtual int pauseRender();
+
+  /// De-increments the pause render count and calls scheduleRender() if one is currently pending
+  /// \sa setPauseRender  
+  virtual int resumeRender();
+
+  /// Returns true if the current pause render count is greater than 0
+  /// \sa setPauseRender
+  virtual bool isRenderPaused()const;
 
   /// Set maximum rate for rendering (in frames per second).
   /// If rendering is requested more frequently than this rate using scheduleRender,
@@ -149,11 +174,7 @@ public:
   Q_INVOKABLE vtkCornerAnnotation* cornerAnnotation()const;
 
   /// Get the underlying QVTKWidget
-#if CTK_USE_QVTKOPENGLWIDGET
-  Q_INVOKABLE QVTKOpenGLWidget * VTKWidget() const;
-#else
-  Q_INVOKABLE QVTKWidget * VTKWidget() const;
-#endif
+  Q_INVOKABLE ctkVTKOpenGLNativeWidget * VTKWidget() const;
 
   /// Get background color
   virtual QColor backgroundColor() const;
@@ -204,6 +225,10 @@ public:
 protected Q_SLOTS:
   void onRender();
   void updateFPS();
+
+  /// Calls forceRender if the rendering has not been paused from pauseRender()
+  /// \sa pauseRender
+  virtual void requestRender();
 
 protected:
   QScopedPointer<ctkVTKAbstractViewPrivate> d_ptr;

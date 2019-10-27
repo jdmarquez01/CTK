@@ -57,11 +57,10 @@ public:
   QList<vtkRenderer*> renderers()const;
   vtkRenderer* firstRenderer()const;
 
-#if CTK_USE_QVTKOPENGLWIDGET
-  QVTKOpenGLWidget*                             VTKWidget;
+  ctkVTKOpenGLNativeWidget*                     VTKWidget;
+#ifdef CTK_USE_QVTKOPENGLWIDGET
   vtkSmartPointer<vtkGenericOpenGLRenderWindow> RenderWindow;
 #else
-  QVTKWidget*                                   VTKWidget;
   vtkSmartPointer<vtkRenderWindow>              RenderWindow;
 #endif
   QTimer*                                       RequestTimer;
@@ -72,6 +71,7 @@ public:
   QTimer*                                       FPSTimer;
   int                                           FPS;
   static int                                    MultiSamples;
+  int                                           PauseRenderCount;
 
   vtkSmartPointer<vtkCornerAnnotation>          CornerAnnotation;
 };

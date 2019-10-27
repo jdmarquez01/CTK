@@ -291,7 +291,6 @@ target_link_libraries(CTKVisualizationVTKWidgets PUBLIC ${KIT_target_libraries} 
 
 set(ALL_HEADER "${PUBLIC_HEADER}" "${CMAKE_CURRENT_BINARY_DIR}/CTKVisualizationVTKWidgetsExport.h")
 
-message("__> ${ALL_HEADER}")
 
 set_target_properties(CTKVisualizationVTKWidgets PROPERTIES PUBLIC_HEADER "${ALL_HEADER}")
 
