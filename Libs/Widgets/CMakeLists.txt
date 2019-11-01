@@ -619,13 +619,145 @@ target_include_directories(CTKWidgets PUBLIC
 
 
 
+
 target_link_libraries(CTKWidgets PUBLIC CTKCore ${KIT_target_libraries} ) 
 
 qt5_wrap_cpp(MY_MOC_GENERATED_SRC ${KIT_GENERATE_MOC_SRCS})
 add_custom_target(CTKWidgets_mocs DEPENDS  ${MY_MOC_GENERATED_SRC})
 add_dependencies(CTKWidgets CTKWidgets_mocs)
 
-set(ALL_HEADER "${PUBLIC_HEADERS}" "${CMAKE_CURRENT_BINARY_DIR}/ctkWidgetsExport.h")
+
+set (PUBLIC_HEADERSS
+    ctkActionsWidget.h
+    ctkAddRemoveComboBox.h
+    ctkAxesWidget.h
+    ctkAxesWidgetEventPlayer.h
+    ctkAxesWidgetEventTranslator.h
+    ctkBasePopupWidget.h
+    ctkBasePopupWidget_p.h
+    ctkButtonGroup.h
+    ctkCheckableComboBox.h
+    ctkCheckableComboBoxEventPlayer.h
+    ctkCheckableComboBoxEventTranslator.h
+    ctkCheckableHeaderView.h
+    ctkCheckableHeaderViewEventPlayer.h
+    ctkCheckableHeaderViewEventTranslator.h
+    ctkCheckableModelHelper.h
+    ctkCheckablePushButton.h
+    ctkCheckBox.h
+    ctkCheckBoxPixmaps.h
+    ctkCollapsibleButton.h
+    ctkCollapsibleGroupBox.h
+    ctkColorDialog.h
+    ctkColorPickerButton.h
+    ctkComboBox.h
+    ctkCompleter.h
+    ctkConsole.h
+    ctkConsole_p.h
+    ctkConsoleEventPlayer.h
+    ctkConsoleEventTranslator.h
+    ctkCoordinatesWidget.h
+    ctkCrosshairLabel.h
+    ctkDateRangeWidget.h
+    ctkDirectoryButton.h
+    ctkDoubleRangeSlider.h
+    ctkDoubleRangeSliderEventPlayer.h
+    ctkDoubleRangeSliderEventTranslator.h
+    ctkDoubleSlider.h
+    ctkDoubleSpinBox.h
+    ctkDynamicSpacer.h
+    ctkErrorLogModel.h
+    ctkErrorLogStatusMessageHandler.h
+    ctkErrorLogWidget.h
+    ctkExpandableWidget.h
+    ctkExpandButton.h
+    ctkFileDialog.h
+    ctkFileDialogEventPlayer.h
+    ctkFileDialogEventTranslator.h
+    ctkFittedTextBrowser.h
+    ctkFittedTextBrowser_p.h
+    ctkFlatProxyModel.h
+    ctkFlowLayout.h
+    ctkFontButton.h
+    ctkFontButtonEventPlayer.h
+    ctkFontButtonEventTranslator.h
+    ctkHistogram.h
+    ctkIconEnginePlugin_qt4.h
+    ctkIconEnginePlugin_qt5.h
+    ctkLanguageComboBox.h
+    ctkLayoutFactory.h
+    ctkLayoutManager.h
+    ctkLayoutManager_p.h
+    ctkLayoutViewFactory.h
+    ctkMaterialPropertyPreviewLabel.h
+    ctkMaterialPropertyWidget.h
+    ctkMatrixWidget.h
+    ctkMatrixWidgetEventPlayer.h
+    ctkMatrixWidgetEventTranslator.h
+    ctkMenuButton.h
+    ctkMenuComboBox.h
+    ctkMenuComboBoxEventPlayer.h
+    ctkMenuComboBoxEventTranslator.h
+    ctkMessageBox.h
+    ctkModalityWidget.h
+    ctkPathLineEdit.h
+    ctkPathLineEditEventPlayer.h
+    ctkPathLineEditEventTranslator.h
+    ctkPathListButtonsWidget.h
+    ctkPathListWidget.h
+    ctkPixmapIconEngine.h
+    ctkPopupWidget.h
+    ctkPopupWidget_p.h
+    ctkPopupWidgetEventPlayer.h
+    ctkPopupWidgetEventTranslator.h
+    ctkProxyStyle.h
+    ctkPushButton.h
+    ctkQImageView.h
+    ctkRangeSlider.h
+    ctkRangeSliderEventPlayer.h
+    ctkRangeSliderEventTranslator.h
+    ctkRangeWidget.h
+    ctkScreenshotDialog.h
+    ctkSearchBox.h
+    ctkSettings.h
+    ctkSettingsDialog.h
+    ctkSettingsPanel.h
+    ctkSignalMapper.h
+    ctkSizeGrip.h
+    ctkSliderWidget.h
+    ctkTemplateWidget.h
+    ctkTestApplication.h
+    ctkThumbnailLabel.h
+    ctkThumbnailListWidget.h
+    ctkThumbnailListWidget_p.h
+    ctkToolTipTrapper.h
+    ctkTransferFunction.h
+    ctkTransferFunctionBarsItem.h
+    ctkTransferFunctionControlPointsItem.h
+    ctkTransferFunctionGradientItem.h
+    ctkTransferFunctionItem.h
+    ctkTransferFunctionNativeItem.h
+    ctkTransferFunctionRepresentation.h
+    ctkTransferFunctionScene.h
+    ctkTransferFunctionView.h
+    ctkTreeComboBox.h
+    ctkTreeComboBoxEventPlayer.h
+    ctkTreeComboBoxEventTranslator.h
+    ctkWidgetsTestingUtilities.h
+    ctkWidgetsUtils.h
+    ctkWorkflowAbstractPagedWidget.h
+    ctkWorkflowButtonBoxWidget.h
+    ctkWorkflowGroupBox.h
+    ctkWorkflowStackedWidget.h
+    ctkWorkflowTabWidget.h
+    ctkWorkflowWidget.h
+    ctkWorkflowWidgetStep.h
+
+
+    )
+
+
+set(ALL_HEADER "${PUBLIC_HEADERS}" ${PUBLIC_HEADERSS} "${CMAKE_CURRENT_BINARY_DIR}/ctkWidgetsExport.h")
 
 message("__> ${ALL_HEADER}")
 

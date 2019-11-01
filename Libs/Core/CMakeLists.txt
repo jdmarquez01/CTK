@@ -50,6 +50,7 @@ ctkAbstractPluginFactory.h
 ctkCommandLineParser.h               
 ctkErrorLogAbstractMessageHandler.h  
 ctkErrorLogStreamMessageHandler.h    
+ctkErrorLogAbstractModel.h
 ctkLogger.h                          
 ctkUtils.h                           
 ctkWorkflow_p.h
@@ -215,7 +216,41 @@ target_include_directories(CTKCore PUBLIC
 )
 
 
-set(ALL_HEADER "${HEADERS}" "${CMAKE_CURRENT_BINARY_DIR}/ctkCoreExport.h")
+set (PUBLIC_HEADERS
+    ctkBackTrace.h
+    ctkBinaryFileDescriptor.h
+    ctkBooleanMapper.h
+    ctkCallback.h
+    ctkCommandLineParser.h
+    ctkCoreTestingUtilities.h
+    ctkDependencyGraph.h
+    ctkErrorLogAbstractMessageHandler.h
+    ctkErrorLogAbstractModel.h
+    ctkErrorLogContext.h
+    ctkErrorLogFDMessageHandler.h
+    ctkErrorLogLevel.h
+    ctkErrorLogQtMessageHandler.h
+    ctkErrorLogStreamMessageHandler.h
+    ctkErrorLogTerminalOutput.h
+    ctkException.h
+    ctkFileLogger.h
+    ctkLinearValueProxy.h
+    ctkLogger.h
+    ctkModelTester.h
+    ctkPimpl.h
+    ctkScopedCurrentDir.h
+    ctkSetName.h
+    ctkUtils.h
+    ctkValueProxy.h
+    ctkWorkflow.h
+    ctkWorkflowStep.h
+    ctkWorkflowStep_p.h
+    ctkWorkflowTransitions.h
+    )
+
+
+
+set(ALL_HEADER "${HEADERS}" ${PUBLIC_HEADERS} "${CMAKE_CURRENT_BINARY_DIR}/ctkCoreExport.h")
 
 message("__> ${ALL_HEADER}")
 

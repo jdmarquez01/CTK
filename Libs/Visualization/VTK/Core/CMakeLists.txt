@@ -219,8 +219,24 @@ target_include_directories(CTKVisualizationVTKCore PUBLIC ${CMAKE_CURRENT_BINARY
 
 target_link_libraries(CTKVisualizationVTKCore PUBLIC ${KIT_target_libraries} )
 
+set (PUBLIC_HEADERSS
 
-set(ALL_HEADER "${PUBLIC_HEADER}" "${CMAKE_CURRENT_BINARY_DIR}/ctkVisualizationVTKCoreExport.h")
+    ./ctkVTKConnection.h
+    ./ctkVTKConnection_p.h
+    ./ctkVTKErrorLogMessageHandler.h
+    ./ctkVTKObjectEventsObserver.h
+    ./ctkVTKPythonQtWrapperFactory.h
+    ./ctkVTKScalarsToColorsUtils.h
+    ./vtkDiscretizableColorTransferChart.h
+    ./vtkDiscretizableColorTransferControlPointsItem.h
+    ./vtkLightBoxRendererManager.h
+    ./vtkScalarsToColorsContextItem.h
+    ./vtkScalarsToColorsHistogramChart.h
+    ./vtkScalarsToColorsPreviewChart.h
+
+    )
+
+set(ALL_HEADER "${PUBLIC_HEADER}" "${PUBLIC_HEADERSS}" "${CMAKE_CURRENT_BINARY_DIR}/ctkVisualizationVTKCoreExport.h")
 
 message("__> ${ALL_HEADER}")
 

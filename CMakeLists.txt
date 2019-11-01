@@ -11,8 +11,8 @@ set(CMAKE_INSTALL_PREFIX
     CACHE FILEPATH "${CMAKE_BINARY_DIR}/install")
 
 ExternalProject_Add(PythonQt-ep
-  GIT_REPOSITORY https://github.com/commontk/PythonQt.git
-  GIT_TAG patched-10
+  GIT_REPOSITORY https://github.com/jdmarquez01/PythonQt.git
+  GIT_TAG patched-9
   PREFIX PythonQt
   UPDATE_COMMAND ""
   UPDATE_DISCONNECTED 1
@@ -47,8 +47,8 @@ message(Inc => ${PythonQt_DIR}/include/PythonQt)
 
   add_library(PythonQt IMPORTED UNKNOWN)
   add_dependencies(PythonQt PythonQt-ep)
-  set_target_properties( PythonQt PROPERTIES IMPORTED_LOCATION ${PythonQt_DIR}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}PythonQt${CMAKE_SHARED_LIBRARY_SUFFIX})
-  set_target_properties( PythonQt PROPERTIES IMPORTED_IMPLIB_RELEASE ${PythonQt_DIR}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}PythonQt${CMAKE_SHARED_LIBRARY_SUFFIX})
+  set_target_properties( PythonQt PROPERTIES IMPORTED_LOCATION ${PythonQt_DIR}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}PythonQt${CMAKE_STATIC_LIBRARY_SUFFIX})
+  set_target_properties( PythonQt PROPERTIES IMPORTED_IMPLIB_RELEASE ${PythonQt_DIR}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}PythonQt${CMAKE_STATIC_LIBRARY_SUFFIX})
   set_target_properties( PythonQt PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${PythonQt_DIR}/include/PythonQt)
 
 

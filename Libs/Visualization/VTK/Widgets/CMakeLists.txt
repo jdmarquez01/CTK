@@ -289,7 +289,41 @@ target_include_directories(CTKVisualizationVTKWidgets PUBLIC ${CMAKE_CURRENT_BIN
 target_link_libraries(CTKVisualizationVTKWidgets PUBLIC ${KIT_target_libraries} )
 
 
-set(ALL_HEADER "${PUBLIC_HEADER}" "${CMAKE_CURRENT_BINARY_DIR}/CTKVisualizationVTKWidgetsExport.h")
+set (PUBLIC_HEADERSS
+    ./ctkVTKAbstractMatrixWidget.h
+    ./ctkVTKAbstractView.h
+    ./ctkVTKChartView.h
+    ./ctkVTKColorTransferFunction.h
+    ./ctkVTKCompositeFunction.h
+    ./ctkVTKDataSetArrayComboBox.h
+    ./ctkVTKDataSetModel.h
+    ./ctkVTKDiscretizableColorTransferWidget.h
+    ./ctkVTKHistogram.h
+    ./ctkVTKLookupTable.h
+    ./ctkVTKMagnifyView.h
+    ./ctkVTKMatrixWidget.h
+    ./ctkVTKOpenGLNativeWidget.h
+    ./ctkVTKPiecewiseFunction.h
+    ./ctkVTKPropertyWidget.h
+    ./ctkVTKRenderView.h
+    ./ctkVTKRenderViewEventPlayer.h
+    ./ctkVTKRenderViewEventTranslator.h
+    ./ctkVTKScalarBarWidget.h
+    ./ctkVTKScalarsToColorsComboBox.h
+    ./ctkVTKScalarsToColorsView.h
+    ./ctkVTKScalarsToColorsWidget.h
+    ./ctkVTKSliceView.h
+    ./ctkVTKSurfaceMaterialPropertyWidget.h
+    ./ctkVTKTextPropertyWidget.h
+    ./ctkVTKThresholdWidget.h
+    ./ctkVTKThumbnailView.h
+    ./ctkVTKVolumePropertyWidget.h
+    ./ctkVTKWidgetsUtils.h
+
+    )
+
+
+set(ALL_HEADER "${PUBLIC_HEADER}" "${PUBLIC_HEADERSS}" "${CMAKE_CURRENT_BINARY_DIR}/CTKVisualizationVTKWidgetsExport.h")
 
 
 set_target_properties(CTKVisualizationVTKWidgets PROPERTIES PUBLIC_HEADER "${ALL_HEADER}")
