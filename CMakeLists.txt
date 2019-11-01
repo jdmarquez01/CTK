@@ -29,12 +29,12 @@ ExternalProject_Add(PythonQt-ep
         -DBUILD_TESTS:BOOL=OFF
         -DQt5_DIR:PATH=${Qt5_DIR}
         -DVTK_DIR:PATH=${VTK5_DIR}
-        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_BINARY_DIR}/install
+        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
  )
 
 
 
- set(PythonQt_DIR "${CMAKE_BINARY_DIR}/install/")
+ set(PythonQt_DIR "${CMAKE_INSTALL_PREFIX}")
 
  file(MAKE_DIRECTORY "${PythonQt_DIR}/include/PythonQt")
 
