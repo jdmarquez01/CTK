@@ -44,11 +44,16 @@ ExternalProject_Add(PythonQt-ep
 message(Lib=> ${PythonQt_DIR}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}CTKCore${CMAKE_SHARED_LIBRARY_SUFFIX})
 message(Inc => ${PythonQt_DIR}/include/PythonQt)
 
+if(BUILD_SHARED_LIBS)
+    set(LIBRARY_SUFFIX ${CMAKE_STATIC_LIBRARY_SUFFIX})
+else()
+    set(LIBRARY_SUFFIX ${CMAKE_SHARED_LIBRARY_SUFFIX})
+endif()
 
   add_library(PythonQt IMPORTED UNKNOWN)
   add_dependencies(PythonQt PythonQt-ep)
-  set_target_properties( PythonQt PROPERTIES IMPORTED_LOCATION ${PythonQt_DIR}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}PythonQt${CMAKE_STATIC_LIBRARY_SUFFIX})
-  set_target_properties( PythonQt PROPERTIES IMPORTED_IMPLIB_RELEASE ${PythonQt_DIR}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}PythonQt${CMAKE_STATIC_LIBRARY_SUFFIX})
+  set_target_properties( PythonQt PROPERTIES IMPORTED_LOCATION ${PythonQt_DIR}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}PythonQt${LIBRARY_SUFFIX})
+  set_target_properties( PythonQt PROPERTIES IMPORTED_IMPLIB_RELEASE ${PythonQt_DIR}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}PythonQt${LIBRARY_SUFFIX})
   set_target_properties( PythonQt PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${PythonQt_DIR}/include/PythonQt)
 
 
