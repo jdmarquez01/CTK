@@ -1,0 +1,4 @@
+[submodule "PythonQt"]
+	path = PythonQt
+	url = https://github.com/jdmarquez01/PythonQt.git
+    branch = patched-8

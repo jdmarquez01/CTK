@@ -1,10 +1,12 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.10)
+
+project(CTK)
 
 include(ExternalProject)
 include(GenerateExportHeader)
 find_package(Qt5 COMPONENTS Core Widgets Gui Xml Help OpenGL)
 find_package(Python3 COMPONENTS Interpreter Development)
-find_package(VTK REQUIRED)
+find_package(VTK)
 
 set(CMAKE_INSTALL_PREFIX
     "${CMAKE_BINARY_DIR}/install"
