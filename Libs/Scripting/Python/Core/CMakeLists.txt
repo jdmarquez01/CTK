@@ -1,6 +1,6 @@
 project(CTKScriptingPythonCore)
 
-set(KIT_target_libraries CTKCore PythonQt Qt5::Gui Qt5::Widgets)
+set(KIT_target_libraries CTKCore pythonqt Qt5::Core Qt5::Gui Qt5::Widgets)
 #
 # See CTK/CMake/ctkMacroBuildLib.cmake for details
 #
@@ -48,6 +48,7 @@ configure_file(
 
 find_package(PythonLibs)
 
+qt5_wrap_cpp(MY_MOC  ${KIT_MOC_SRCS})
 
 add_library(
   CTKScriptingPythonCore
@@ -66,7 +67,7 @@ generate_export_header(CTKScriptingPythonCore EXPORT_FILE_NAME "${CMAKE_CURRENT_
 target_include_directories(CTKScriptingPythonCore PUBLIC ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR}) 
 
 
-target_link_libraries(CTKScriptingPythonCore PUBLIC ${KIT_target_libraries} PythonQt ${PYTHON_LIBRARY}
+target_link_libraries(CTKScriptingPythonCore PUBLIC ${KIT_target_libraries} pythonqt ${PYTHON_LIBRARY}
 
     ${QT_PYTHON_WRAPPED_LIBRARIES_LIST}
     )
