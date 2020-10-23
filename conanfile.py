@@ -1,6 +1,6 @@
 from conans import ConanFile, tools, CMake
 
-class HelloConan(ConanFile):
+class CTK(ConanFile):
     name = "CTK"
     version = "0.1"
     license = "<Put the package license here>"
@@ -16,8 +16,10 @@ class HelloConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        #self.options.VTK_DIR
         cmake.definitions["Qt5_DIR"] = self.options.Qt5_DIR
+        if self.options.VTK_DIR != "":
+            print ("entramos por aqui")
+            cmake.definitions["VTK_DIR"] = self.options.VTK_DIR
         tools.replace_in_file("CMakeLists.txt", "PROJECT(CTK)",'''PROJECT(CTK)
         include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         conan_basic_setup()''')
@@ -38,6 +40,9 @@ class HelloConan(ConanFile):
         self.copy("*.a", dst="lib", keep_path=False)
 
     def package_info(self):
+    
         self.cpp_info.libs = ["CTKCore","CTKScriptingPythonCore", "CTKWidgets","CTKScriptingPythonWidgets"]
-        self.cpp_info.includedirs = ["include/CTKCore","include/CTKScriptingPythonCore", "include/CTKWidgets","include/CTKScriptingPythonWidgets"]
-        
+        self.cpp_info.includedirs = ["include/CTKCore","include/CTKScriptingPythonCore", "include/CTKWidgets","include/CTKScriptingPythonWidgets", "include/CTKVisualizationVTKCore"]
+        if self.options.VTK_DIR != "":
+            self.cpp_info.libs+= ["CTKVisualizationVTKCore" , "CTKVisualizationVTKWidgets"]
+            self.cpp_info.includedirs+=["include/CTKVisualizationVTKCore", "include/CTKVisualizationVTKWidgets"]

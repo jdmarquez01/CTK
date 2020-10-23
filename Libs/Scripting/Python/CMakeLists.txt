@@ -1,2 +1,3 @@
+add_definitions(-DPYTHONQT_USE_RELEASE_PYTHON_FALLBACK)
 add_subdirectory(Core)
 add_subdirectory(Widgets)

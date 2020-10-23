@@ -10,7 +10,8 @@ include(ExternalProject)
 include(GenerateExportHeader)
 find_package(Qt5 COMPONENTS Core Widgets Gui Xml Help OpenGL)
 find_package(Python3 COMPONENTS Interpreter Development)
-find_package(VTK)
+message ("VTK => ${VTK_DIR}")
+find_package(VTK REQUIRED PATHS ${VTK_DIR})
 
 
 

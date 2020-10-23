@@ -252,7 +252,7 @@ set (PUBLIC_HEADERS
 
 set(ALL_HEADER "${HEADERS}" ${PUBLIC_HEADERS} "${CMAKE_CURRENT_BINARY_DIR}/ctkCoreExport.h")
 
-message("__> ${ALL_HEADER}")
+#message("__> ${ALL_HEADER}")
 
 set_target_properties(CTKCore PROPERTIES PUBLIC_HEADER "${ALL_HEADER}")
 
