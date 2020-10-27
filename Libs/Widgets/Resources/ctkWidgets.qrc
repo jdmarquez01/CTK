@@ -254,5 +254,6 @@
         <file>Icons/Languages/zm.png</file>
         <file>Icons/Languages/zw.png</file>
         <file>Icons/Languages/en.png</file>
+        <file>Icons/Languages/us.png</file>
     </qresource>
 </RCC>

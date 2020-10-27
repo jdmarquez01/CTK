@@ -34,7 +34,7 @@ set(KIT_resources
 find_package(PythonLibs)
 
 qt5_wrap_cpp(MY_MOC  ${KIT_MOC_SRCS})
-
+qt5_add_resources (out ${KIT_resources})
 add_library(
   CTKScriptingPythonWidgets STATIC
   ${KIT_SRCS}
@@ -42,7 +42,7 @@ add_library(
     ${INCLUDES}
     ${MY_MOC}
     ${MY_UI_GENERATED_SRC}
-    ${KIT_resources}
+    ${out}
     ${KIT_GENERATE_MOC_SRCS}
      
 

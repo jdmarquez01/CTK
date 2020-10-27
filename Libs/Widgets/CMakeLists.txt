@@ -594,7 +594,7 @@ SET(CMAKE_AUTOMOC OFF)
 
 qt5_wrap_ui(MY_UI_GENERATED_SRC  ${KIT_UI_FORMS})
 qt5_wrap_cpp(MY_MOC  ${KIT_MOC_SRCS} )
-
+qt5_add_resources (out ${KIT_resources})
 
 add_library(
   CTKWidgets
@@ -603,7 +603,7 @@ add_library(
     ${INCLUDES}
     ${MY_MOC}
     ${MY_UI_GENERATED_SRC}
-    ${KIT_resources}
+    ${out}
     ${KIT_GENERATE_MOC_SRCS}
      
 
