@@ -86,7 +86,8 @@ class CTK_WIDGETS_EXPORT ctkConsole : public QWidget
   Q_PROPERTY(QList<QKeySequence> completerShortcuts READ completerShortcuts WRITE setCompleterShortcuts)
   Q_FLAGS(RunFileOption RunFileOptions)
   Q_PROPERTY(RunFileOptions runFileOptions READ runFileOptions WRITE setRunFileOptions)
-  
+  Q_PROPERTY(int maxVisibleCompleterItems READ maxVisibleCompleterItems WRITE setMaxVisibleCompleterItems)
+
 public:
 
   enum EditorHint
@@ -111,22 +112,22 @@ public:
   virtual ~ctkConsole();
 
   /// Returns the current formatting that will be used by printMessage()
-  QTextCharFormat getFormat() const;
+  Q_INVOKABLE QTextCharFormat getFormat() const;
   
   /// Sets formatting that will be used by printMessage()
-  void setFormat(const QTextCharFormat& Format);
+  Q_INVOKABLE void setFormat(const QTextCharFormat& Format);
 
   /// Returns current font of python shell
-  QFont shellFont() const;
+  Q_INVOKABLE QFont shellFont() const;
 
   /// Sets font of python shell
-  void setShellFont(const QFont& font);
+  Q_INVOKABLE void setShellFont(const QFont& font);
 
   /// Return the completer of this console
-  ctkConsoleCompleter* completer() const;
+  Q_INVOKABLE ctkConsoleCompleter* completer() const;
 
   /// Set a completer for this console
-  void setCompleter(ctkConsoleCompleter* completer);
+  Q_INVOKABLE void setCompleter(ctkConsoleCompleter* completer);
 
   QColor promptColor()const;
 
@@ -172,9 +173,6 @@ public:
   /// \sa scrollBarPolicy()
   void setScrollBarPolicy(const Qt::ScrollBarPolicy& newScrollBarPolicy);
 
-  /// Prints text on the console
-  void printMessage(const QString& message, const QColor& color);
-
   /// Returns the string used as primary prompt
   virtual QString ps1() const;
 
@@ -198,6 +196,12 @@ public:
   /// Returns the line of the cursor within the console.
   /// \sa cursorPositionChanged(int)
   int cursorLine() const;
+
+  /// Get maximum number of items shown in the auto-complete popup.
+  int maxVisibleCompleterItems() const;
+
+  /// Set maximum number of items shown in the auto-complete popup.
+  void setMaxVisibleCompleterItems(int);
 
   static QString stdInRedirectCallBack(void * callData);
 
@@ -255,6 +259,17 @@ public Q_SLOTS:
 
   /// Print the console help with shortcuts.
   virtual void printHelp();
+
+  /// Prints text on the console
+  void printMessage(const QString& message, const QColor& color);
+
+  /// Print a message
+  /// \sa ctkConsole::outputTextColor
+  void printOutputMessage(const QString& text);
+
+  /// Print a message
+  /// \sa ctkConsole::errorTextColor
+  void printErrorMessage(const QString& text);
 
 protected:
 

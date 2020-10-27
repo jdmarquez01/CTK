@@ -241,7 +241,7 @@ set(Tests_RESOURCES_SRCS)
 
 find_package(Qt5 COMPONENTS Test)
 
-add_executable(${KIT}CppTests ${Tests} ${Tests_SRCS} ${Tests_MOC_CPP} ${Tests_UI_CPP} ${Tests_RESOURCES_SRCS})
+ctk_add_executable_utf8(${KIT}CppTests ${Tests} ${Tests_SRCS} ${Tests_MOC_CPP} ${Tests_UI_CPP} ${Tests_RESOURCES_SRCS})
 target_link_libraries(${KIT}CppTests ${LIBRARY_NAME})
 
 

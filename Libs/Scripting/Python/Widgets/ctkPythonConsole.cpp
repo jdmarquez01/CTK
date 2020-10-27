@@ -131,7 +131,11 @@ int ctkPythonConsoleCompleter::cursorOffset(const QString& completion)
         break;
         }
       }
+    #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList lineSplit = currentCompletionText.split(".", Qt::KeepEmptyParts);
+    #else
     QStringList lineSplit = currentCompletionText.split(".", QString::KeepEmptyParts);
+    #endif
     QString functionName = lineSplit.at(lineSplit.length()-1);
     QStringList builtinFunctionPath = QStringList() << "__main__" << "__builtins__";
     QStringList userDefinedFunctionPath = QStringList() << "__main__";
@@ -195,7 +199,11 @@ int ctkPythonConsoleCompleter::parameterCountBuiltInFunction(const QString& pyth
         {
         QString docString = PyString_AsString(pDoc);
         QString argumentExtract = docString.mid(docString.indexOf("(")+1, docString.indexOf(")") - docString.indexOf("(")-1);
+        #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        QStringList arguments = argumentExtract.split(",", Qt::SkipEmptyParts);
+        #else
         QStringList arguments = argumentExtract.split(",", QString::SkipEmptyParts);
+        #endif
         parameterCount = arguments.count();
         }
       Py_DECREF(pDoc);
@@ -271,7 +279,11 @@ int ctkPythonConsoleCompleter::parameterCountFromDocumentation(const QString& py
         {
         QString docString = PyString_AsString(pDoc);
         QString argumentExtract = docString.mid(docString.indexOf("(")+1, docString.indexOf(")") - docString.indexOf("(")-1);
+        #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        QStringList arguments = argumentExtract.split(",", Qt::SkipEmptyParts);
+        #else
         QStringList arguments = argumentExtract.split(",", QString::SkipEmptyParts);
+        #endif
         parameterCount = arguments.count();
         }
       Py_DECREF(pDoc);
@@ -578,9 +590,9 @@ void ctkPythonConsole::initialize(ctkAbstractPythonManager* newPythonManager)
   d->initializeInteractiveConsole();
 
   this->connect(PythonQt::self(), SIGNAL(pythonStdOut(QString)),
-                d, SLOT(printOutputMessage(QString)));
+                this, SLOT(printOutputMessage(QString)));
   this->connect(PythonQt::self(), SIGNAL(pythonStdErr(QString)),
-                d, SLOT(printErrorMessage(QString)));
+                this, SLOT(printErrorMessage(QString)));
 
   PythonQt::self()->setRedirectStdInCallback(
         ctkConsole::stdInRedirectCallBack, reinterpret_cast<void*>(this));

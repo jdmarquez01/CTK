@@ -118,7 +118,11 @@ void ctkVTKAbstractViewPrivate::setupRendering()
     }
   this->RenderWindow->SetMultiSamples(nSamples);
   this->RenderWindow->StereoCapableWindowOn();
+#if VTK_MAJOR_VERSION >= 9 || (VTK_MAJOR_VERSION >= 8 && VTK_MINOR_VERSION >= 90)
+  this->VTKWidget->setRenderWindow(this->RenderWindow);
+#else
   this->VTKWidget->SetRenderWindow(this->RenderWindow);
+#endif
 }
 
 //---------------------------------------------------------------------------
@@ -340,14 +344,14 @@ void ctkVTKAbstractView::setCornerAnnotationText(const QString& text)
 {
   Q_D(ctkVTKAbstractView);
   d->CornerAnnotation->ClearAllTexts();
-  d->CornerAnnotation->SetText(2, text.toLatin1());
+  d->CornerAnnotation->SetText(2, text.toUtf8());
 }
 
 //----------------------------------------------------------------------------
 QString ctkVTKAbstractView::cornerAnnotationText() const
 {
   Q_D(const ctkVTKAbstractView);
-  return QLatin1String(d->CornerAnnotation->GetText(2));
+  return QString::fromUtf8(d->CornerAnnotation->GetText(2));
 }
 
 //----------------------------------------------------------------------------
@@ -510,7 +514,7 @@ void ctkVTKAbstractView::updateFPS()
   double lastRenderTime = renderer ? renderer->GetLastRenderTimeInSeconds() : 0.;
   QString fpsString = tr("FPS: %1(%2s)").arg(d->FPS).arg(lastRenderTime);
   d->FPS = 0;
-  d->CornerAnnotation->SetText(1, fpsString.toLatin1());
+  d->CornerAnnotation->SetText(1, fpsString.toUtf8());
 }
 
 //----------------------------------------------------------------------------

@@ -60,6 +60,8 @@ ctkErrorLogContext.h
 ctkErrorLogTerminalOutput.h          
 ctkModelTester.h                     
 ctkValueProxy.h
+ctkCompatibility_p.h
+ctkCoreSettings.h
 )
 
 
@@ -67,6 +69,7 @@ ctkValueProxy.h
 
 # Source files
 set(KIT_SRCS
+  ctkCoreSettings.cpp
   ctkAbstractFactory.h
   ctkAbstractFactory.tpp
   ctkAbstractFileBasedFactory.h
@@ -86,6 +89,8 @@ set(KIT_SRCS
   ctkCallback.h
   ctkCommandLineParser.cpp
   ctkCommandLineParser.h
+  ctkCoreSettings.cpp
+  ctkCoreSettings.h
   ctkCoreTestingUtilities.cpp
   ctkCoreTestingUtilities.tpp
   ctkCoreTestingUtilities.h
@@ -149,6 +154,7 @@ set(KIT_MOC_SRCS
   ctkBooleanMapper.h
   ctkCallback.h
   ctkCommandLineParser.h
+  ctkCoreSettings.h
   ctkErrorLogAbstractMessageHandler.h
   ctkErrorLogAbstractModel.h
   ctkErrorLogFDMessageHandler_p.h
